@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Google+Sans+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/google-sans');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Google Sans', 'Google Sans Text', 'Product Sans', sans-serif;
+}
+
+@layer base {
+  :root {
+    --font-sans: 'Google Sans', 'Google Sans Text', 'Product Sans', sans-serif;
+  }
+
+  *, ::before, ::after {
+    font-family: 'Google Sans', 'Google Sans Text', 'Product Sans', sans-serif;
+  }
+
+  html {
+    font-family: 'Google Sans', 'Google Sans Text', 'Product Sans', sans-serif;
+    color: #102E57;
+    background-color: #F7F8FA;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+  }
+
+  body {
+    font-family: 'Google Sans', 'Google Sans Text', 'Product Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  button, input, optgroup, select, textarea {
+    font-family: 'Google Sans', 'Google Sans Text', 'Product Sans', sans-serif;
+  }
+
+  section {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+}
+
+/* Normal, crisp typography styles and high-contrast tokens */
+.headline-primary {
+  color: #0F172A;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.headline-secondary {
+  color: #102E57;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.text-prose-lead {
+  color: #334155;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.text-prose-body {
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* Subtle clean card and container surfaces */
+.surface-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+}
+
+.surface-card-subtle {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+@keyframes metallicShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes breezeFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(25px, -18px) scale(1.04);
+  }
+
+  100% {
+    transform: translate(-18px, 15px) scale(0.97);
+  }
+}
+
+/* Glassmorphic subtle panels */
+.subtle-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(220, 235, 250, 0.7);
+}
+
+.dark-glass {
+  background: rgba(16, 46, 87, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(220, 235, 250, 0.2);
+}
+
+/* Custom discreet scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F0F6FC;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #AEBBC9;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #174B91;
+}

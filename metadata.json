@@ -1,0 +1,8 @@
+{
+  "name": "affyne labs",
+  "description": "Immersive 3D digital experience for affynelabs, building human-centered, privacy-first, and safety-centered technology solutions for healthcare.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
