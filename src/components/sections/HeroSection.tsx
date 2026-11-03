@@ -29,11 +29,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         <motion.img
-          src="/assets/hero.png"
-          alt="Serene meadow above misty mountains"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
+          src="/assets/Serene_Meadow_Above_Misty_Mountains.png"
+          alt=""
+          aria-hidden="true"
           style={{ scale: backgroundScale }}
           className="absolute inset-0 w-full h-full object-cover object-bottom sm:object-[center_bottom] scale-[1.20] sm:scale-[1.14] md:scale-100 origin-[50%_80%] md:origin-bottom -translate-y-4 sm:-translate-y-5 md:translate-y-0 transition-transform duration-700 ease-out z-0"
           loading="eager"
@@ -56,11 +54,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           src="/assets/Serene_Meadow_Foreground_Character.png"
           alt=""
           aria-hidden="true"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.08, ease: 'easeOut' }}
           style={{ scale: backgroundScale }}
           className="absolute inset-0 w-full h-full object-cover object-bottom sm:object-[center_bottom] scale-[1.20] sm:scale-[1.14] md:scale-100 origin-[50%_80%] md:origin-bottom -translate-y-4 sm:-translate-y-5 md:translate-y-0 pointer-events-none select-none z-10 transition-transform duration-700 ease-out"
+          loading="eager"
         />
 
         {/* Ethereal morning mist dissolve seamlessly transitioning into Section 02 (#ffffff) */}
@@ -76,30 +72,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* 
         Central Typographic Storytelling Plane:
-        Dynamically aligns to any screen size (mobile, tablet, desktop) without overlapping.
-        Bottom clearance scales proportionally with viewport height (26vh) so the headline
-        and CTA button remain centered in the open sky above the character across all aspect ratios.
+        Dynamically adapts to any desktop, laptop, tablet, or mobile screen.
+        The bottom clearance strictly scales with the character's 3D head position
+        (calc(max(37vh, 20.8vw) + 36px)) to guarantee that the headline and CTA button
+        always sit gracefully on top of (above) the character's head on every screen resolution.
       */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 text-center flex flex-col items-center justify-center shrink-0 pt-16 sm:pt-20 md:pt-24 pb-[clamp(150px,26vh,260px)]"
+        className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 text-center flex flex-col items-center justify-center shrink-0 pt-16 sm:pt-18 md:pt-20 pb-[calc(max(38vh,21vw)+24px)] md:pb-[calc(max(37vh,20.8vw)+36px)]"
       >
         {/* 
           Display Headline:
           Enters sequentially (delay: 0.35s).
-          Fluid clamp font size fits mobile, tablet, and desktop continuously.
+          Dual-axis fluid clamp scales with both viewport width and height so it never exceeds
+          the vertical sky space on short laptop displays or widescreen monitors.
           whitespace-nowrap guarantees two balanced lines on every screen.
         */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-[clamp(1rem,2.2vh,1.75rem)]"
+          className="mb-[clamp(0.85rem,1.8vh,1.5rem)]"
         >
           <h1
             className="select-none tracking-[-0.035em] leading-[1.08] font-medium mx-auto max-w-none text-balance"
             style={{
-              fontSize: 'clamp(1.85rem, 1.25rem + 3.2vw, 4.5rem)',
+              fontSize: 'clamp(1.85rem, min(1.2rem + 3.2vw, 6.2vh), 4.35rem)',
               background:
                 'linear-gradient(175deg, #FFFFFF 0%, #FFFFFF 22%, #E6F0FD 40%, #B2D3FA 55%, #FFFFFF 70%, #F5E6FB 84%, #CFE3FC 94%, #FFFFFF 100%)',
               WebkitBackgroundClip: 'text',
@@ -116,7 +114,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* 
           CTA Button: Try Mythri
           Enters sequentially after headline (delay: 0.55s).
-          Proportional fluid padding and typography.
+          Comfortably positioned on top of (above) the character's head with clean breathing room.
         */}
         <motion.div
           initial={{ opacity: 0, y: 12, scale: 0.95 }}
@@ -127,7 +125,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <button
             type="button"
             onClick={onExploreClick}
-            className="px-[clamp(1.6rem,2.8vw,2.25rem)] py-[clamp(0.65rem,1.2vh,0.9rem)] rounded-full text-[clamp(0.8125rem,0.9vw,0.9375rem)] font-semibold text-white bg-[#0F294D] hover:bg-[#174B91] transition-all cursor-pointer shadow-[0_8px_24px_rgba(15,41,77,0.22)] active:scale-95"
+            className="px-[clamp(1.5rem,2.5vw,2.15rem)] py-[clamp(0.6rem,1.1vh,0.85rem)] rounded-full text-[clamp(0.8125rem,0.9vw,0.9375rem)] font-semibold text-white bg-[#0F294D] hover:bg-[#174B91] transition-all cursor-pointer shadow-[0_8px_24px_rgba(15,41,77,0.22)] active:scale-95"
           >
             Try Mythri
           </button>
