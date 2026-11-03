@@ -5,7 +5,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { HeroEnvironmentScene } from './components/3d/HeroEnvironmentScene';
-import { TypographyPortal } from './components/portal/TypographyPortal';
 import { DiscreetNavigation } from './components/navigation/DiscreetNavigation';
 import { HeroSection } from './components/sections/HeroSection';
 import { WhoWeAreSection } from './components/sections/WhoWeAreSection';
@@ -17,40 +16,9 @@ import { FooterSection } from './components/footer/FooterSection';
 import type { SectionId } from './types';
 
 export default function App() {
-  // Always start with the opening portal animation on every page load / reload
-  const [hasEnteredPortal, setHasEnteredPortal] = useState<boolean>(false);
-  const [showHeroContent, setShowHeroContent] = useState<boolean>(false);
-
   const [activeSection, setActiveSection] = useState<SectionId>('home');
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [heroScrollProgress, setHeroScrollProgress] = useState<number>(0);
-
-  const handlePortalStart = useCallback(() => {
-    // Fired when transition starts: affynelabs begins fading out
-  }, []);
-
-  const handleFadeInContent = useCallback(() => {
-    // Fired AFTER the deliberate pause/gap: hero content & nav now fade in
-    setShowHeroContent(true);
-  }, []);
-
-  const handlePortalEnter = useCallback(() => {
-    setShowHeroContent(true);
-    setHasEnteredPortal(true);
-  }, []);
-
-  // Lock scroll while the portal is active, and reset to top on mount
-  useEffect(() => {
-    if (!hasEnteredPortal) {
-      window.scrollTo(0, 0);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [hasEnteredPortal]);
 
   // Smooth navigation to a specific section
   const scrollToSection = useCallback((sectionId: SectionId) => {
@@ -107,31 +75,18 @@ export default function App() {
   return (
     <div className="relative min-h-screen bg-[#F7F8FA] text-[#202B38] font-sans antialiased overflow-x-hidden">
       {/* 
-        Opening Experience: Breezy atmosphere with centered affynelabs over hero background.
-        Clicking or scrolling smoothly dissolves into the hero section content.
-      */}
-      {!hasEnteredPortal && (
-        <TypographyPortal
-          onStartTransition={handlePortalStart}
-          onFadeInContent={handleFadeInContent}
-          onEnter={handlePortalEnter}
-          isCompleted={hasEnteredPortal}
-        />
-      )}
-
-      {/* 
         Persistent Atmospheric Light Scene (Three.js WebGL)
         Renders delicate sunlit drifting particles catching morning light with subtle mouse parallax.
         Fades out cleanly when scrolled past the hero to preserve pure contrast for content sections.
       */}
       <div
-        className={`fixed inset-0 pointer-events-none z-0 transition-opacity duration-300 ${
+        className={`fixed inset-0 pointer-events-none z-0 transition-opacity duration-500 ${
           heroScrollProgress >= 0.95 ? 'opacity-0' : 'opacity-100'
         }`}
       >
         <HeroEnvironmentScene
           scrollProgress={heroScrollProgress}
-          isPortalActive={!hasEnteredPortal}
+          isPortalActive={false}
         />
       </div>
 
@@ -144,7 +99,7 @@ export default function App() {
         onNavigate={scrollToSection}
         scrollProgress={scrollProgress}
         heroScrollProgress={heroScrollProgress}
-        showNav={showHeroContent}
+        showNav={true}
       />
 
       {/* Main Experience Flow */}
@@ -153,7 +108,6 @@ export default function App() {
         <HeroSection
           onExploreClick={() => scrollToSection('who-we-are')}
           onNavigateSection={scrollToSection}
-          showContent={showHeroContent}
         />
 
         {/* 02: Who We Are (Identity, Integrity, Responsibility) */}

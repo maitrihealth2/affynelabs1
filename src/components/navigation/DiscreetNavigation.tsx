@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import type { SectionId } from '../../types';
 
@@ -77,11 +78,14 @@ export const DiscreetNavigation: React.FC<DiscreetNavigationProps> = ({
 
       {/* 
         Persistent Minimal Top Left Brand Wordmark:
-        Always floating cleanly without any bar or block behind it
+        Smoothly enters with graceful stagger (delay 0.15s) on page load
       */}
-      <div
-        className={`fixed top-5 left-6 sm:left-10 lg:left-16 z-40 select-none pointer-events-auto transition-all duration-700 ${
-          showNav ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: showNav ? 1 : 0, y: showNav ? 0 : -8 }}
+        transition={{ duration: 0.5, delay: 0.15, ease: 'easeOut' }}
+        className={`fixed top-5 left-5 sm:left-8 md:left-12 lg:left-16 z-40 select-none pointer-events-auto ${
+          !showNav ? 'pointer-events-none' : ''
         }`}
       >
         <button
@@ -90,7 +94,7 @@ export const DiscreetNavigation: React.FC<DiscreetNavigationProps> = ({
         >
           affynelabs
         </button>
-      </div>
+      </motion.div>
 
       {/* 
         Pull-Down Auto-Hiding Navigation Bar:
