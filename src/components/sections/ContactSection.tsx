@@ -79,7 +79,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
   return (
     <section
       id="contact"
-      className="relative w-full h-screen min-h-[620px] max-h-screen px-6 sm:px-12 lg:px-20 py-8 lg:py-10 border-t border-slate-200/80 flex flex-col justify-between snap-start overflow-hidden select-none"
+      className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 border-t border-slate-200/80 flex flex-col justify-center overflow-hidden select-none"
     >
       {/* Background Pastel Artwork with Soft Ambient Contrast Layer */}
       <div className="absolute inset-0 z-0">
@@ -94,45 +94,45 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
         <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-white/60" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
+      <div className="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center">
         {/* Section Header */}
-        <div className="pt-4 sm:pt-6">
+        <div className="pt-1 sm:pt-2 mb-4">
           <div className="max-w-3xl">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#1D4E89] block mb-1.5">
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#1D4E89] block mb-1">
               Dialogue · Clinical Partnerships · Inquiry
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[54px] font-bold tracking-tight leading-[1.08] text-[#0C1A30] mb-2">
+            <h2 className="text-[28px] sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[54px] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-[#0C1A30] mb-2">
               Let us build <span className="text-[#1D4E89] italic">understanding</span> together.
             </h2>
-            <p className="text-sm sm:text-base text-[#334155] leading-relaxed max-w-2xl">
+            <p className="text-xs sm:text-base text-[#334155] leading-relaxed max-w-2xl">
               Whether you are a clinician, academic researcher, or healthcare partner dedicated to human-centered technology, we welcome dialogue.
             </p>
           </div>
         </div>
 
         {/* Central 2-Column Split: Seamless Editorial Touchpoints + Form (Zero Boxed Containers) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center my-auto py-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-14 items-center my-auto py-1">
           {/* Left Column: Direct Inquiries Info (Pure editorial items, no card containers) */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="flex items-start gap-3.5">
-              <div className="w-9 h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0 mt-0.5">
-                <MapPin className="w-4 h-4" />
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-2 sm:gap-4 lg:gap-0 lg:space-y-6">
+            <div className="flex items-center sm:items-start gap-2.5 sm:gap-3">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0">
+                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
               <div className="space-y-0.5">
-                <h3 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
+                <h3 className="text-[10px] sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
                   Headquarters
                 </h3>
                 <p className="text-xs sm:text-sm text-[#334155] font-medium">Bengaluru, Karnataka, India</p>
-                <p className="text-xs text-[#64748B]">Engineering & Clinical Research Lab</p>
+                <p className="hidden sm:block text-xs text-[#64748B]">Engineering & Clinical Research Lab</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3.5">
-              <div className="w-9 h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0 mt-0.5">
-                <Mail className="w-4 h-4" />
+            <div className="flex items-center sm:items-start gap-2.5 sm:gap-3">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0">
+                <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
               <div className="space-y-0.5">
-                <h3 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
+                <h3 className="text-[10px] sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
                   Direct Contact
                 </h3>
                 <a
@@ -141,20 +141,20 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                 >
                   contact@affynelabs.com
                 </a>
-                <p className="text-xs text-[#64748B]">General, partnership & clinical queries</p>
+                <p className="hidden sm:block text-xs text-[#64748B]">General, partnership & clinical queries</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3.5">
-              <div className="w-9 h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0 mt-0.5">
-                <Clock className="w-4 h-4" />
+            <div className="flex items-center sm:items-start gap-2.5 sm:gap-3">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0">
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
               <div className="space-y-0.5">
-                <h3 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
+                <h3 className="text-[10px] sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
                   Response Window
                 </h3>
                 <p className="text-xs sm:text-sm text-[#334155] font-medium">Within 24–48 business hours</p>
-                <p className="text-xs text-[#64748B]">Every inquiry is reviewed directly by our clinical team</p>
+                <p className="hidden sm:block text-xs text-[#64748B]">Every inquiry is reviewed directly by our clinical team</p>
               </div>
             </div>
           </div>

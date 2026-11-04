@@ -1,16 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import type { SectionId } from '../../types';
 
 interface HeroSectionProps {
   onExploreClick?: () => void;
   onNavigateSection?: (sectionId: SectionId) => void;
+  onHeroReady?: () => void;
+  isHeroActive?: boolean;
+  onActivateHero?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onExploreClick,
   onNavigateSection,
+  onHeroReady,
+  isHeroActive: isHeroActiveProp,
+  onActivateHero,
 }) => {
+  // Opening brand intro stage: starts with monumental 'affynelabs' in the center
+  const [internalIsHeroActive, setInternalIsHeroActive] = useState(false);
+  const isHeroActive = isHeroActiveProp !== undefined ? isHeroActiveProp : internalIsHeroActive;
+
+  const activateHero = useCallback(() => {
+    if (onActivateHero) {
+      onActivateHero();
+    }
+    setInternalIsHeroActive(true);
+    if (onHeroReady) onHeroReady();
+  }, [onActivateHero, onHeroReady]);
+
+  // Advance ONLY upon explicit user click (or tap / Enter key) — strictly no auto-timer
+  useEffect(() => {
+    if (isHeroActive) return;
+
+    const handleClick = () => {
+      activateHero();
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+        activateHero();
+      }
+    };
+
+    window.addEventListener('click', handleClick);
+    window.addEventListener('touchend', handleClick);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('click', handleClick);
+      window.removeEventListener('touchend', handleClick);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isHeroActive, activateHero]);
+
   // Scroll parallax depth transformations
   const { scrollYProgress } = useScroll();
   const backgroundScale = useTransform(scrollYProgress, [0, 0.35], [1, 1.03]);
@@ -20,16 +63,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section
       id="home"
-      className="relative h-screen min-h-[560px] md:min-h-[640px] w-full flex flex-col items-center justify-center overflow-hidden select-none"
+      onClick={activateHero}
+      className={`relative h-screen min-h-[560px] md:min-h-[640px] w-full flex flex-col items-center justify-center overflow-hidden select-none ${
+        !isHeroActive ? 'cursor-pointer' : 'cursor-default'
+      }`}
     >
       {/* 
-        Full-Viewport Cinematic Environmental Backdrop
-        The authentic Dreamy Mountain Meadow Reverie artwork fills the entire hero seamlessly
-        from top to bottom with zero cuts, seams, or borders.
+        Full-Viewport Cinematic Environmental Backdrop & 3D Layer Stack:
+        Layer 0: Scenery Background (Sky, Clouds, Misty Mountains, Meadow Character)
+        Layer 1: Monumental 'affynelabs' Brand Typography (3D midground)
+        Layer 2: Foreground Character Cutout & Flowers (sits in front of the brand letters)
+        Layer 3: Ethereal morning mist dissolve into Section 02
       */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        {/* Layer 0: Scenery Background */}
         <motion.img
-          src="/assets/Serene_Meadow_Above_Misty_Mountains.png"
+          src="/assets/hero.png"
           alt=""
           aria-hidden="true"
           style={{ scale: backgroundScale }}
@@ -37,31 +86,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           loading="eager"
         />
 
-        {/* 
-          Ultra-gentle ambient luminance:
-          Protects text contrast in the sky while preserving the natural colors and ethereal clouds
-        */}
+        {/* Ultra-gentle ambient luminance */}
         <div
           className="absolute inset-0 bg-gradient-to-b from-black/[0.04] via-transparent to-transparent pointer-events-none z-0"
           aria-hidden="true"
         />
 
         {/* 
-          Foreground Character Cutout & Meadow Grass:
-          Ensures the character maintains authentic 3D spatial depth in the hero
+          Layer 2: Foreground Character Cutout & Meadow Grass:
+          Ensures the character maintains authentic 3D spatial depth on top of 'affynelabs'
         */}
         <motion.img
           src="/assets/Serene_Meadow_Foreground_Character.png"
           alt=""
           aria-hidden="true"
           style={{ scale: backgroundScale }}
-          className="absolute inset-0 w-full h-full object-cover object-bottom sm:object-[center_bottom] scale-[1.20] sm:scale-[1.14] md:scale-100 origin-[50%_80%] md:origin-bottom -translate-y-4 sm:-translate-y-5 md:translate-y-0 pointer-events-none select-none z-10 transition-transform duration-700 ease-out"
+          className="absolute inset-0 w-full h-full object-cover object-bottom sm:object-[center_bottom] scale-[1.20] sm:scale-[1.14] md:scale-100 origin-[50%_80%] md:origin-bottom -translate-y-4 sm:-translate-y-5 md:translate-y-0 pointer-events-none select-none z-20 transition-transform duration-700 ease-out"
           loading="eager"
         />
 
         {/* Ethereal morning mist dissolve seamlessly transitioning into Section 02 (#ffffff) */}
         <div
-          className="absolute -bottom-[2px] left-0 right-0 h-36 sm:h-48 md:h-60 pointer-events-none z-20"
+          className="absolute -bottom-[2px] left-0 right-0 h-36 sm:h-48 md:h-60 pointer-events-none z-25"
           style={{
             background:
               'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.3) 45%, rgba(255,255,255,0.68) 70%, rgba(255,255,255,0.92) 88%, #ffffff 100%)',
@@ -79,31 +125,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       */}
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 text-center flex flex-col items-center justify-center shrink-0 pt-16 sm:pt-18 md:pt-20 pb-[calc(max(38vh,21vw)+24px)] md:pb-[calc(max(37vh,20.8vw)+36px)]"
+        className={`relative z-30 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 text-center flex flex-col items-center justify-center shrink-0 pt-16 sm:pt-18 md:pt-20 pb-[calc(max(38vh,21vw)+24px)] md:pb-[calc(max(37vh,20.8vw)+36px)] transition-all duration-500 ease-out ${isHeroActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
       >
         {/* 
           Display Headline:
-          Enters sequentially (delay: 0.35s).
+          Enters sequentially after the opening wordmark dissolves.
           Dual-axis fluid clamp scales with both viewport width and height so it never exceeds
           the vertical sky space on short laptop displays or widescreen monitors.
           whitespace-nowrap guarantees two balanced lines on every screen.
         */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          animate={{ opacity: isHeroActive ? 1 : 0, y: isHeroActive ? 0 : 16 }}
+          transition={{ duration: 0.65, delay: isHeroActive ? 0.25 : 0, ease: [0.16, 1, 0.3, 1] }}
           className="mb-[clamp(0.85rem,1.8vh,1.5rem)]"
         >
           <h1
-            className="select-none tracking-[-0.035em] leading-[1.08] font-medium mx-auto max-w-none text-balance"
+            className="select-none tracking-[-0.035em] leading-[1.06] font-medium mx-auto max-w-none text-balance text-white text-[clamp(1.75rem,7.4vw,2.35rem)] md:text-[clamp(3.25rem,5.2vw,5.5rem)]"
             style={{
-              fontSize: 'clamp(1.85rem, min(1.2rem + 3.2vw, 6.2vh), 4.35rem)',
-              background:
-                'linear-gradient(175deg, #FFFFFF 0%, #FFFFFF 22%, #E6F0FD 40%, #B2D3FA 55%, #FFFFFF 70%, #F5E6FB 84%, #CFE3FC 94%, #FFFFFF 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              filter:
-                'drop-shadow(0 1px 1px rgba(255, 255, 255, 0.95)) drop-shadow(0 3px 6px rgba(8, 28, 68, 0.48)) drop-shadow(0 10px 28px rgba(12, 38, 90, 0.30))',
+              color: '#FFFFFF',
             }}
           >
             <span className="block whitespace-nowrap">Technology should</span>
@@ -113,13 +154,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* 
           CTA Button: Try Mythri
-          Enters sequentially after headline (delay: 0.55s).
+          Enters sequentially after headline.
           Comfortably positioned on top of (above) the character's head with clean breathing room.
         */}
         <motion.div
           initial={{ opacity: 0, y: 12, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          animate={{ opacity: isHeroActive ? 1 : 0, y: isHeroActive ? 0 : 12, scale: isHeroActive ? 1 : 0.95 }}
+          transition={{ duration: 0.5, delay: isHeroActive ? 0.45 : 0, ease: [0.16, 1, 0.3, 1] }}
           className="flex justify-center"
         >
           <button

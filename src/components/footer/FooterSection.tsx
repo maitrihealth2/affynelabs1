@@ -15,7 +15,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
   return (
     <footer
       id="footer"
-      className="relative w-full min-h-screen lg:h-screen lg:max-h-screen px-6 sm:px-12 lg:px-20 pt-10 sm:pt-14 pb-0 bg-white border-t border-slate-200/80 flex flex-col justify-between snap-start overflow-x-hidden lg:overflow-hidden select-none"
+      className="relative w-full min-h-screen lg:h-screen lg:max-h-screen px-6 sm:px-12 lg:px-20 pt-6 sm:pt-8 pb-0 bg-white border-t border-slate-200/80 flex flex-col justify-between snap-start overflow-x-hidden lg:overflow-hidden select-none"
     >
       {/* 
         Top Directory Grid:

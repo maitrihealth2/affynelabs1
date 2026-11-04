@@ -19,6 +19,8 @@ export default function App() {
   const [activeSection, setActiveSection] = useState<SectionId>('home');
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [heroScrollProgress, setHeroScrollProgress] = useState<number>(0);
+  const [isHeroReady, setIsHeroReady] = useState<boolean>(false);
+  const [isHeroActive, setIsHeroActive] = useState<boolean>(false);
 
   // Smooth navigation to a specific section
   const scrollToSection = useCallback((sectionId: SectionId) => {
@@ -91,15 +93,17 @@ export default function App() {
       </div>
 
       {/* 
-        Discreet Navigation
-        (Unified top bar on desktop + compact mobile bar)
+        Morphing Top-Center Brand Navigation
+        Starts centered & monumental behind character -> Morphs to top-center menu button
+        Opens bilateral navigation options equally divided on both sides in one line
       */}
       <DiscreetNavigation
         activeSection={activeSection}
         onNavigate={scrollToSection}
         scrollProgress={scrollProgress}
         heroScrollProgress={heroScrollProgress}
-        showNav={true}
+        isHeroActive={isHeroActive}
+        onActivateHero={() => setIsHeroActive(true)}
       />
 
       {/* Main Experience Flow */}
@@ -108,6 +112,9 @@ export default function App() {
         <HeroSection
           onExploreClick={() => scrollToSection('who-we-are')}
           onNavigateSection={scrollToSection}
+          onHeroReady={() => setIsHeroReady(true)}
+          isHeroActive={isHeroActive}
+          onActivateHero={() => setIsHeroActive(true)}
         />
 
         {/* 02: Who We Are (Identity, Integrity, Responsibility) */}
