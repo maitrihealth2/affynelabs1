@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Send, CheckCircle2, AlertCircle, Loader2, Mail, MapPin, Clock } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Send, CheckCircle2, AlertCircle, Loader2, Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
 import { PolicyModal } from '../modals/PolicyModal';
 import type { ContactFormData, SectionId } from '../../types';
 
@@ -48,27 +48,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
       const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to submit message.');
-      }
-
+      if (!response.ok) throw new Error(result.error || 'Failed to submit message.');
       setSubmitSuccess(result.message);
-      setFormData({
-        fullName: '',
-        email: '',
-        organization: '',
-        subject: 'Clinical Partnership',
-        message: '',
-        privacyAgreed: true,
-      });
+      setFormData({ fullName: '', email: '', organization: '', subject: 'Clinical Partnership', message: '', privacyAgreed: true });
     } catch (err: any) {
       setSubmitError(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
@@ -79,111 +65,125 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
   return (
     <section
       id="contact"
-      className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 border-t border-slate-200/80 flex flex-col justify-center overflow-hidden select-none"
+      style={{ scrollSnapAlign: 'center' }}
+      className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-20 sm:pt-24 lg:pt-0 pb-12 lg:pb-0 flex flex-col lg:justify-center overflow-hidden select-none"
     >
-      {/* Background Pastel Artwork with Soft Ambient Contrast Layer */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/assets/contact_pastel_art.jpg"
-          alt="Contact Pastel Atmosphere"
-          className="w-full h-full object-cover object-center pointer-events-none"
-        />
-        {/* Soft daylight gradient overlay for crystal-clear readability */}
-        <div className="absolute inset-0 bg-white/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/85 to-white/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-white/60" />
-      </div>
+      {/* Clean white background with very subtle warm tint */}
+      <div className="absolute inset-0 bg-[#FAFBFD]" />
+      {/* Soft top gradient rule matching previous sections */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px pointer-events-none z-10"
+        style={{ background: 'linear-gradient(to right, transparent, rgba(29,78,137,0.15), transparent)' }}
+      />
+      {/* Bottom fade to white, matching footer entry */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-10"
+        style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.7))' }}
+      />
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center">
-        {/* Section Header */}
-        <div className="pt-1 sm:pt-2 mb-4">
-          <div className="max-w-3xl">
-            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#1D4E89] block mb-1">
-              Dialogue · Clinical Partnerships · Inquiry
+      <div className="relative z-10 max-w-7xl mx-auto w-full lg:py-16">
+
+        {/* ——— Two-column layout: left editorial / right form ——— */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start">
+
+          {/* LEFT: Editorial storytelling column */}
+          <div className="space-y-8 lg:pt-2">
+            {/* Eyebrow */}
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1D4E89] block">
+              Dialogue · Clinical Partnerships
             </span>
-            <h2 className="text-[28px] sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[54px] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-[#0C1A30] mb-2">
-              Let us build <span className="text-[#1D4E89] italic">understanding</span> together.
+
+            {/* Headline */}
+            <h2 className="text-[32px] sm:text-[42px] lg:text-[52px] xl:text-[58px] font-bold tracking-tight leading-[1.08] text-[#0C1A30]">
+              Let us build{' '}
+              <span className="text-[#1D4E89] italic">understanding</span>{' '}
+              together.
             </h2>
-            <p className="text-xs sm:text-base text-[#334155] leading-relaxed max-w-2xl">
-              Whether you are a clinician, academic researcher, or healthcare partner dedicated to human-centered technology, we welcome dialogue.
+
+            {/* Subtext */}
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed max-w-md">
+              Whether you are a clinician, academic researcher, or healthcare partner dedicated to human-centered technology — we welcome every dialogue.
             </p>
-          </div>
-        </div>
 
-        {/* Central 2-Column Split: Seamless Editorial Touchpoints + Form (Zero Boxed Containers) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-14 items-center my-auto py-1">
-          {/* Left Column: Direct Inquiries Info (Pure editorial items, no card containers) */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-2 sm:gap-4 lg:gap-0 lg:space-y-6">
-            <div className="flex items-center sm:items-start gap-2.5 sm:gap-3">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0">
-                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-[10px] sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
-                  Headquarters
-                </h3>
-                <p className="text-xs sm:text-sm text-[#334155] font-medium">Bengaluru, Karnataka, India</p>
-                <p className="hidden sm:block text-xs text-[#64748B]">Engineering & Clinical Research Lab</p>
-              </div>
-            </div>
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-[#1D4E89]/20 via-transparent to-transparent w-24" />
 
-            <div className="flex items-center sm:items-start gap-2.5 sm:gap-3">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0">
-                <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-[10px] sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
-                  Direct Contact
-                </h3>
-                <a
-                  href="mailto:contact@affynelabs.com"
-                  className="text-xs sm:text-sm text-[#1D4E89] font-semibold hover:underline block"
-                >
-                  contact@affynelabs.com
-                </a>
-                <p className="hidden sm:block text-xs text-[#64748B]">General, partnership & clinical queries</p>
-              </div>
-            </div>
-
-            <div className="flex items-center sm:items-start gap-2.5 sm:gap-3">
-              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/90 border border-slate-200/80 flex items-center justify-center text-[#1D4E89] shadow-xs shrink-0">
-                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              </div>
-              <div className="space-y-0.5">
-                <h3 className="text-[10px] sm:text-[13px] font-bold uppercase tracking-wider text-[#0F223D]">
-                  Response Window
-                </h3>
-                <p className="text-xs sm:text-sm text-[#334155] font-medium">Within 24–48 business hours</p>
-                <p className="hidden sm:block text-xs text-[#64748B]">Every inquiry is reviewed directly by our clinical team</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Contact Message Form (Directly on layout, zero container cards) */}
-          <div className="lg:col-span-7">
-            {submitSuccess ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="p-6 rounded-2xl bg-emerald-50/90 border border-emerald-200 text-center space-y-2.5 max-w-lg"
-              >
-                <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-5 h-5" />
+            {/* Contact details — pure editorial, no containers */}
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="mt-0.5 w-8 h-8 rounded-full border border-[#1D4E89]/20 flex items-center justify-center text-[#1D4E89] shrink-0">
+                  <MapPin className="w-3.5 h-3.5" />
                 </div>
-                <h4 className="text-base font-bold text-[#0C1A30]">Message Received</h4>
-                <p className="text-xs sm:text-sm text-[#475569] max-w-sm mx-auto">{submitSuccess}</p>
-                <button
-                  onClick={() => setSubmitSuccess(null)}
-                  className="mt-2 text-xs font-semibold text-[#1D4E89] hover:underline cursor-pointer"
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#94A3B8] mb-0.5">Headquarters</p>
+                  <p className="text-sm font-semibold text-[#0C1A30]">Bengaluru, Karnataka, India</p>
+                  <p className="text-xs text-[#64748B]">Engineering & Clinical Research Lab</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="mt-0.5 w-8 h-8 rounded-full border border-[#1D4E89]/20 flex items-center justify-center text-[#1D4E89] shrink-0">
+                  <Mail className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#94A3B8] mb-0.5">Direct Contact</p>
+                  <a href="mailto:contact@affynelabs.com" className="text-sm font-semibold text-[#1D4E89] hover:underline">
+                    contact@affynelabs.com
+                  </a>
+                  <p className="text-xs text-[#64748B]">General, partnership & clinical queries</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="mt-0.5 w-8 h-8 rounded-full border border-[#1D4E89]/20 flex items-center justify-center text-[#1D4E89] shrink-0">
+                  <Clock className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#94A3B8] mb-0.5">Response Window</p>
+                  <p className="text-sm font-semibold text-[#0C1A30]">Within 24–48 business hours</p>
+                  <p className="text-xs text-[#64748B]">Every inquiry reviewed by our clinical team</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: Lightweight conversational form */}
+          <div className="lg:pt-2">
+            <AnimatePresence mode="wait">
+              {submitSuccess ? (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col items-start gap-4 py-10"
                 >
-                  Send another message
-                </button>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#334155] mb-1.5">
+                    <h4 className="text-lg font-bold text-[#0C1A30] mb-1">Message Received</h4>
+                    <p className="text-sm text-[#475569]">{submitSuccess}</p>
+                  </div>
+                  <button
+                    onClick={() => setSubmitSuccess(null)}
+                    className="text-xs font-semibold text-[#1D4E89] hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    Send another <ArrowRight className="w-3 h-3" />
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.form
+                  key="form"
+                  onSubmit={handleSubmit}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="space-y-0"
+                >
+                  {/* Name */}
+                  <div className="border-b border-slate-200 py-4 group focus-within:border-[#1D4E89] transition-colors">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#94A3B8] mb-1.5 group-focus-within:text-[#1D4E89] transition-colors">
                       Full Name *
                     </label>
                     <input
@@ -191,11 +191,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       placeholder="Dr. Eleanor Vance"
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/95 border border-slate-300 text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#1D4E89]/30 focus:border-[#1D4E89] transition-all shadow-xs"
+                      className="w-full bg-transparent text-sm text-[#0C1A30] placeholder:text-[#CBD5E1] focus:outline-none"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#334155] mb-1.5">
+
+                  {/* Email */}
+                  <div className="border-b border-slate-200 py-4 group focus-within:border-[#1D4E89] transition-colors">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#94A3B8] mb-1.5 group-focus-within:text-[#1D4E89] transition-colors">
                       Email Address *
                     </label>
                     <input
@@ -203,63 +205,95 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="eleanor@institution.edu"
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/95 border border-slate-300 text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#1D4E89]/30 focus:border-[#1D4E89] transition-all shadow-xs"
+                      className="w-full bg-transparent text-sm text-[#0C1A30] placeholder:text-[#CBD5E1] focus:outline-none"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#334155] mb-1.5">
-                    Message *
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Share your perspective or collaborative research interest..."
-                    className="w-full px-4 py-2.5 rounded-xl bg-white/95 border border-slate-300 text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#1D4E89]/30 focus:border-[#1D4E89] transition-all shadow-xs resize-none"
-                  />
-                </div>
-
-                {submitError && (
-                  <div className="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{submitError}</span>
+                  {/* Organization (optional) */}
+                  <div className="border-b border-slate-200 py-4 group focus-within:border-[#1D4E89] transition-colors">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#94A3B8] mb-1.5 group-focus-within:text-[#1D4E89] transition-colors">
+                      Organization
+                      <span className="normal-case font-normal tracking-normal ml-1 text-[#CBD5E1]">(optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.organization}
+                      onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                      placeholder="AIIMS, WHO, independent practice…"
+                      className="w-full bg-transparent text-sm text-[#0C1A30] placeholder:text-[#CBD5E1] focus:outline-none"
+                    />
                   </div>
-                )}
 
-                <div className="pt-1 flex items-center justify-end">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="px-8 py-3 rounded-full bg-[#0C1A30] hover:bg-[#1D4E89] text-white text-sm font-semibold flex items-center gap-2 transition-all shadow-md active:scale-[0.98] cursor-pointer disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Sending message...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Send Message</span>
-                        <Send className="w-3.5 h-3.5" />
-                      </>
+                  {/* Message */}
+                  <div className="border-b border-slate-200 py-4 group focus-within:border-[#1D4E89] transition-colors">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-[#94A3B8] mb-1.5 group-focus-within:text-[#1D4E89] transition-colors">
+                      Message *
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Share your perspective or collaborative research interest…"
+                      className="w-full bg-transparent text-sm text-[#0C1A30] placeholder:text-[#CBD5E1] focus:outline-none resize-none"
+                    />
+                  </div>
+
+                  {/* Error */}
+                  <AnimatePresence>
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-3 flex items-center gap-2 text-xs text-rose-600">
+                          <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                          <span>{submitError}</span>
+                        </div>
+                      </motion.div>
                     )}
-                  </button>
-                </div>
-              </form>
-            )}
+                  </AnimatePresence>
+
+                  {/* Submit */}
+                  <div className="pt-6 flex items-center justify-between">
+                    <p className="text-[11px] text-[#94A3B8] leading-snug max-w-[200px]">
+                      By submitting you agree to our{' '}
+                      <button
+                        type="button"
+                        onClick={() => setIsPolicyModalOpen(true)}
+                        className="text-[#1D4E89] hover:underline cursor-pointer"
+                      >
+                        Privacy Policy
+                      </button>
+                      .
+                    </p>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#0C1A30] hover:bg-[#1D4E89] text-white text-sm font-semibold transition-all shadow-md active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Sending…</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Message</span>
+                          <Send className="w-3.5 h-3.5" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </motion.form>
+              )}
+            </AnimatePresence>
           </div>
         </div>
-
-        {/* Quiet Bottom Footprint Placeholder */}
-        <div className="pt-2" />
       </div>
 
-      <PolicyModal
-        isOpen={isPolicyModalOpen}
-        onClose={() => setIsPolicyModalOpen(false)}
-      />
+      <PolicyModal isOpen={isPolicyModalOpen} onClose={() => setIsPolicyModalOpen(false)} />
     </section>
   );
 };

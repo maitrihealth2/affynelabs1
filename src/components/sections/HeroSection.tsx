@@ -64,18 +64,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     <section
       id="home"
       onClick={activateHero}
+      style={{ scrollSnapAlign: 'center' }}
       className={`relative h-screen min-h-[560px] md:min-h-[640px] w-full flex flex-col items-center justify-center overflow-hidden select-none ${
         !isHeroActive ? 'cursor-pointer' : 'cursor-default'
       }`}
     >
       {/* 
-        Full-Viewport Cinematic Environmental Backdrop & 3D Layer Stack:
-        Layer 0: Scenery Background (Sky, Clouds, Misty Mountains, Meadow Character)
-        Layer 1: Monumental 'affynelabs' Brand Typography (3D midground)
-        Layer 2: Foreground Character Cutout & Flowers (sits in front of the brand letters)
-        Layer 3: Ethereal morning mist dissolve into Section 02
+        Border Frame Container: a subtle inset border around the hero image
+        giving the entire viewport a framed, editorial feel.
       */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div
+        className="absolute inset-2 sm:inset-3 md:inset-4 rounded-2xl sm:rounded-3xl overflow-hidden pointer-events-none z-0"
+        style={{
+          boxShadow: '0 0 0 1px rgba(255,255,255,0.22) inset, 0 0 0 1px rgba(15,41,77,0.10)',
+          border: '1px solid rgba(255,255,255,0.28)',
+        }}
+      >
         {/* Layer 0: Scenery Background */}
         <motion.img
           src="/assets/hero.png"

@@ -4,6 +4,7 @@ export const WhoWeAreSection: React.FC = () => {
   return (
     <section
       id="who-we-are"
+      style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen lg:h-screen lg:max-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:pt-28 pb-10 sm:pb-16 lg:pb-20 flex flex-col justify-between overflow-hidden select-none bg-[#FBFBFE]"
     >
       {/* Background: Authentic Pastel Lavender Wave Gradient */}

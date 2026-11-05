@@ -12,6 +12,7 @@ export const WaitingListSection: React.FC = () => {
   return (
     <section
       id="mythri"
+      style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 border-t border-slate-200/80 flex flex-col justify-center overflow-hidden select-none"
     >
       {/* Live Interactive WebGL Pastel Silk Background */}

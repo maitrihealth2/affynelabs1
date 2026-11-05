@@ -82,6 +82,7 @@ export const WhatWeDoSection: React.FC = () => {
   return (
     <section
       id="what-we-do"
+      style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 bg-white flex flex-col justify-center overflow-hidden select-none"
     >
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center my-auto">

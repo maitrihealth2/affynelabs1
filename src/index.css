@@ -20,6 +20,7 @@
     color: #102E57;
     background-color: #F7F8FA;
     scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
   }
 
   body {

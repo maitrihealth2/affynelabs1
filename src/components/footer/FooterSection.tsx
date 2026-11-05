@@ -15,14 +15,15 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
   return (
     <footer
       id="footer"
-      className="relative w-full min-h-screen lg:h-screen lg:max-h-screen px-6 sm:px-12 lg:px-20 pt-6 sm:pt-8 pb-0 bg-white border-t border-slate-200/80 flex flex-col justify-between snap-start overflow-x-hidden lg:overflow-hidden select-none"
+      style={{ scrollSnapAlign: 'center' }}
+      className="relative w-full px-6 sm:px-12 lg:px-20 pt-6 sm:pt-8 pb-0 bg-white border-t border-slate-200/80 flex flex-col justify-between snap-start overflow-x-hidden overflow-hidden select-none"
     >
       {/* 
         Top Directory Grid:
         Left Column: Brand Identity, Compliance Certifications, Socials & Registered Entity
         Right 5 Columns: Clear, structured categorized site directory
       */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
+      <div className="relative z-10 max-w-7xl mx-auto w-full py-4 sm:py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Left Column: Brand, Certifications & Corporate Address */}
           <div className="lg:col-span-4 space-y-4">
@@ -304,7 +305,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
         Bottom Monumental Wordmark:
         Interactive WebGL Silk-Cloth Text (ClothText) with ripples, folding physics & cursor reaction
       */}
-      <div className="relative w-full flex items-center justify-center pt-1 pb-16 sm:pb-8 md:pb-6 overflow-hidden">
+      <div className="relative w-full flex items-center justify-center pt-1 pb-4 sm:pb-3 overflow-hidden">
         <div className="relative z-10 w-full text-center">
           <ClothText
             text="affynelabs"
