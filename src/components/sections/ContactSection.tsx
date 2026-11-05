@@ -68,17 +68,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
       style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-20 sm:pt-24 lg:pt-0 pb-12 lg:pb-0 flex flex-col lg:justify-center overflow-hidden select-none"
     >
-      {/* Clean white background with very subtle warm tint */}
+      {/* Background — same near-white as Mythri bottom blend, fully continuous */}
       <div className="absolute inset-0 bg-[#FAFBFD]" />
-      {/* Soft top gradient rule matching previous sections */}
+      {/* Top seamless blend — fades in from Mythri's #FAFBFD exit, no hard line */}
       <div
-        className="absolute top-0 left-0 right-0 h-px pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to right, transparent, rgba(29,78,137,0.15), transparent)' }}
+        className="absolute top-0 left-0 right-0 h-20 pointer-events-none z-10"
+        style={{ background: 'linear-gradient(to bottom, #FAFBFD 0%, rgba(250,251,253,0) 100%)' }}
       />
-      {/* Bottom fade to white, matching footer entry */}
+      {/* Bottom seamless blend — fades into Footer white */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.7))' }}
+        className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none z-10"
+        style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, #ffffff 100%)' }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto w-full lg:py-16">

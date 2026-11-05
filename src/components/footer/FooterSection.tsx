@@ -16,7 +16,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onNavigate }) => {
     <footer
       id="footer"
       style={{ scrollSnapAlign: 'center' }}
-      className="relative w-full px-6 sm:px-12 lg:px-20 pt-6 sm:pt-8 pb-0 bg-white border-t border-slate-200/80 flex flex-col justify-between snap-start overflow-x-hidden overflow-hidden select-none"
+      className="relative w-full px-6 sm:px-12 lg:px-20 pt-6 sm:pt-8 pb-0 bg-white flex flex-col justify-between snap-start overflow-x-hidden overflow-hidden select-none"
     >
       {/* 
         Top Directory Grid:

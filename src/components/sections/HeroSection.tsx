@@ -70,15 +70,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       }`}
     >
       {/* 
-        Border Frame Container: a subtle inset border around the hero image
-        giving the entire viewport a framed, editorial feel.
+        Border Frame Container: a minimal inset border around the hero scene.
+        No glass/shadow — just a clean thin perimeter line.
       */}
       <div
-        className="absolute inset-2 sm:inset-3 md:inset-4 rounded-2xl sm:rounded-3xl overflow-hidden pointer-events-none z-0"
-        style={{
-          boxShadow: '0 0 0 1px rgba(255,255,255,0.22) inset, 0 0 0 1px rgba(15,41,77,0.10)',
-          border: '1px solid rgba(255,255,255,0.28)',
-        }}
+        className="absolute inset-1 rounded-xl overflow-hidden pointer-events-none z-0"
+        style={{ border: '1px solid rgba(255,255,255,0.18)' }}
       >
         {/* Layer 0: Scenery Background */}
         <motion.img

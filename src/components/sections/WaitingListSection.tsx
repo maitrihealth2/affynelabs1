@@ -13,7 +13,7 @@ export const WaitingListSection: React.FC = () => {
     <section
       id="mythri"
       style={{ scrollSnapAlign: 'center' }}
-      className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 border-t border-slate-200/80 flex flex-col justify-center overflow-hidden select-none"
+      className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 flex flex-col justify-center overflow-hidden select-none"
     >
       {/* Live Interactive WebGL Pastel Silk Background */}
       <div className="absolute inset-0 z-0">
@@ -22,9 +22,18 @@ export const WaitingListSection: React.FC = () => {
           className="w-full h-full"
         />
         {/* Soft daylight ambient overlay for pure typographic contrast */}
-        <div className="absolute inset-0 bg-white/40 pointer-events-none" />
+        <div className="absolute inset-0 bg-white/35 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/30 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-transparent to-white/50 pointer-events-none" />
+        {/* Top seamless blend — fades from bg of What We Do (white) */}
+        <div
+          className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 100%)' }}
+        />
+        {/* Bottom seamless blend — fades into Contact (#FAFBFD) */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none z-10"
+          style={{ background: 'linear-gradient(to bottom, rgba(250,251,253,0) 0%, #FAFBFD 100%)' }}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center pointer-events-none">
