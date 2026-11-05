@@ -16,12 +16,11 @@ export const WhoWeAreSection: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Top blend: transparent at top so the hero image flows in naturally, fades to section bg */}
+        {/* Top: fully transparent — hero's bottom gradient already dissolves into this bg colour */}
         <div
-          className="absolute top-0 left-0 right-0 h-28 sm:h-36 md:h-44 pointer-events-none z-10"
+          className="absolute top-0 left-0 right-0 h-20 pointer-events-none z-10"
           style={{
-            background:
-              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.7) 75%, rgba(255,255,255,0) 100%)',
+            background: 'linear-gradient(to bottom, #FBFBFE 0%, rgba(251,251,254,0) 100%)',
           }}
           aria-hidden="true"
         />
