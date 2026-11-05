@@ -16,15 +16,6 @@ export const WhoWeAreSection: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Top: subtle ambient transition from hero */}
-        <div
-          className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-10"
-          style={{
-            background: 'linear-gradient(to bottom, rgba(251,251,254,0.6) 0%, rgba(251,251,254,0) 100%)',
-          }}
-          aria-hidden="true"
-        />
-
         {/* Bottom Soft Dissolve: Bridges cleanly into Foundation */}
         <div
           className="absolute -bottom-[2px] left-0 right-0 h-24 sm:h-32 pointer-events-none z-10"
