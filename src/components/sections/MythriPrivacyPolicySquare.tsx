@@ -59,8 +59,8 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
         body: JSON.stringify({ email: email.trim(), agreedPolicy: true }),
       });
 
-      // Allow 1.2s minimum for the squeezing circle animation
-      await new Promise((r) => setTimeout(r, 1200));
+      // Smooth responsive delay
+      await new Promise((r) => setTimeout(r, 400));
 
       if (!response.ok) {
         // Fallback gracefully if mock server is not bound
@@ -70,7 +70,7 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
       setIsSuccess(true);
       if (onSuccess) onSuccess(email.trim());
     } catch {
-      await new Promise((r) => setTimeout(r, 1200));
+      await new Promise((r) => setTimeout(r, 400));
       setIsSubmitting(false);
       setIsSuccess(true);
       if (onSuccess) onSuccess(email.trim());
@@ -390,96 +390,73 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
             </button>
           </div>
         ) : (
-          /* Step 2 & 3: Email Input with Squeeze-in Morph Animation */
+          /* Step 2 & 3: Email Input with Smooth Animated Transition into Checkbox */
           <div>
             <AnimatePresence mode="wait">
               {isSuccess ? (
-                /* Step 4: Success confirmation with green tick */
+                /* Step 4: Clean Success confirmation with checkbox and simple message */
                 <motion.div
                   key="success-box"
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex items-center gap-3 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex items-center gap-3 p-3 rounded-2xl bg-[#F8FAFC] border border-slate-200/90 shadow-xs"
                 >
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25, delay: 0.1 }}
-                    className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 28, delay: 0.05 }}
+                    className="w-5 h-5 rounded-md bg-emerald-600 border border-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs"
                   >
-                    <Check className="w-5 h-5 stroke-[3]" />
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
                   </motion.div>
-                  <div className="flex-1 text-xs">
-                    <h5 className="font-bold text-sm text-[#0C1A30]">
-                      You have joined the list
-                    </h5>
-                    <p className="text-[#475569] text-[11px] mt-0.5">
-                      Your priority request is registered under clinical safety protocols.
-                    </p>
-                  </div>
+                  <span className="font-semibold text-xs sm:text-sm text-[#0C1A30]">
+                    You have joined the list
+                  </span>
                 </motion.div>
               ) : (
-                /* Email Input form that morphs / squeezes into a circle during loading */
-                <form onSubmit={handleEmailSubmit} className="relative flex flex-col items-center">
-                  <motion.div
-                    layout
-                    animate={
-                      isSubmitting
-                        ? {
-                            width: 52,
-                            height: 52,
-                            borderRadius: 9999,
-                            backgroundColor: '#0C1A30',
-                          }
-                        : {
-                            width: '100%',
-                            height: 'auto',
-                            borderRadius: 16,
-                            backgroundColor: '#F8FAFC',
-                          }
-                    }
-                    transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                    className="flex items-center justify-between border border-slate-200 overflow-hidden shadow-xs"
-                  >
-                    {isSubmitting ? (
-                      /* Squeezed Circle: Loading Spinner Animation */
-                      <motion.div
-                        key="circle-loading"
-                        initial={{ opacity: 0, rotate: 0 }}
-                        animate={{ opacity: 1, rotate: 360 }}
-                        transition={{
-                          opacity: { duration: 0.2 },
-                          rotate: { repeat: Infinity, duration: 1, ease: 'linear' },
-                        }}
-                        className="w-full h-full flex items-center justify-center text-white"
-                      >
-                        <Loader2 className="w-6 h-6 animate-spin text-white" />
-                      </motion.div>
-                    ) : (
-                      /* Normal Expanded Form */
-                      <div className="flex items-center w-full p-1.5 gap-2">
-                        <input
-                          type="email"
-                          required
-                          data-testid="early-access-email-input"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Enter your email address"
-                          autoFocus
-                          className="flex-1 px-3 py-2 bg-transparent text-xs sm:text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none"
-                        />
-                        <button
-                          type="submit"
-                          data-testid="early-access-submit-button"
-                          className="px-4 py-2 rounded-xl bg-[#0C1A30] hover:bg-[#1A56DB] text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer shrink-0 shadow-xs active:scale-95"
-                        >
+                /* Email Input form */
+                <motion.form
+                  key="email-form"
+                  onSubmit={handleEmailSubmit}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.25 }}
+                  className="relative flex flex-col"
+                >
+                  <div className="flex items-center w-full p-1.5 rounded-2xl border border-slate-200 bg-[#F8FAFC] shadow-xs focus-within:border-[#1A56DB] focus-within:bg-white transition-all">
+                    <input
+                      type="email"
+                      required
+                      data-testid="early-access-email-input"
+                      value={email}
+                      disabled={isSubmitting}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      autoFocus
+                      className="flex-1 px-3 py-2 bg-transparent text-xs sm:text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none disabled:opacity-60"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      data-testid="early-access-submit-button"
+                      className="px-4 py-2 rounded-xl bg-[#0C1A30] hover:bg-[#1A56DB] text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer shrink-0 shadow-xs active:scale-95 disabled:opacity-70"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
+                          <span>Joining...</span>
+                        </>
+                      ) : (
+                        <>
                           <span>Join List</span>
                           <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    )}
-                  </motion.div>
+                        </>
+                      )}
+                    </button>
+                  </div>
 
                   {errorMessage && (
                     <motion.div
@@ -491,7 +468,7 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
                       <span>{errorMessage}</span>
                     </motion.div>
                   )}
-                </form>
+                </motion.form>
               )}
             </AnimatePresence>
           </div>

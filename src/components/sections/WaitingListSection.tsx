@@ -73,9 +73,9 @@ export const WaitingListSection: React.FC = () => {
               <div
                 className={`flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border transition-all select-none ${
                   joinedEmail
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    ? 'bg-white/90 border-slate-200 shadow-2xs text-[#0C1A30]'
                     : isPolicyAgreed
-                    ? 'bg-blue-50 border-blue-200 text-[#0C1A30]'
+                    ? 'bg-white/90 border-slate-200 shadow-2xs text-[#0C1A30]'
                     : isPolicySquareOpen
                     ? 'bg-slate-50/90 border-slate-200/80 text-[#64748B]'
                     : 'bg-white/60 border-slate-200/60 text-[#94A3B8] opacity-75'
@@ -95,7 +95,7 @@ export const WaitingListSection: React.FC = () => {
 
                 <div className="text-xs leading-none">
                   {joinedEmail ? (
-                    <span className="font-semibold text-emerald-700">Joined waitlist</span>
+                    <span className="font-semibold text-[#0C1A30]">Joined waitlist</span>
                   ) : isPolicyAgreed ? (
                     <span className="font-semibold text-[#1A56DB]">Policy agreed · Enter email</span>
                   ) : (
