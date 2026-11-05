@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, CheckCircle2, AlertCircle, Loader2, X, Lock, Unlock, ArrowRight } from 'lucide-react';
+import { Check, X, Lock, Unlock } from 'lucide-react';
+import { WaitlistPillInput } from '../ui/WaitlistPillInput';
 
 interface MythriPrivacyPolicySquareProps {
   isOpen: boolean;
@@ -15,10 +16,6 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
 }) => {
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -29,51 +26,6 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
     const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight <= threshold;
     if (isAtBottom && !hasScrolledToBottom) {
       setHasScrolledToBottom(true);
-    }
-  };
-
-  // Reset state when closed
-  useEffect(() => {
-    if (!isOpen) {
-      // Keep completed state if user has already joined
-    }
-  }, [isOpen]);
-
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email.trim())) {
-      setErrorMessage('Please enter a valid email address.');
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      // Simulate/call API
-      const response = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), agreedPolicy: true }),
-      });
-
-      // Smooth responsive delay
-      await new Promise((r) => setTimeout(r, 400));
-
-      if (!response.ok) {
-        // Fallback gracefully if mock server is not bound
-      }
-
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      if (onSuccess) onSuccess(email.trim());
-    } catch {
-      await new Promise((r) => setTimeout(r, 400));
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      if (onSuccess) onSuccess(email.trim());
     }
   };
 
@@ -390,87 +342,16 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
             </button>
           </div>
         ) : (
-          /* Step 2 & 3: Email Input with Smooth Animated Transition into Checkbox */
-          <div>
-            <AnimatePresence mode="wait">
-              {isSuccess ? (
-                /* Step 4: Clean Success confirmation with checkbox and simple message */
-                <motion.div
-                  key="success-box"
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex items-center gap-3 p-3 rounded-2xl bg-[#F8FAFC] border border-slate-200/90 shadow-xs"
-                >
-                  <motion.div
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 28, delay: 0.05 }}
-                    className="w-5 h-5 rounded-md bg-emerald-600 border border-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs"
-                  >
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  </motion.div>
-                  <span className="font-semibold text-xs sm:text-sm text-[#0C1A30]">
-                    You have joined the list
-                  </span>
-                </motion.div>
-              ) : (
-                /* Email Input form */
-                <motion.form
-                  key="email-form"
-                  onSubmit={handleEmailSubmit}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.25 }}
-                  className="relative flex flex-col"
-                >
-                  <div className="flex items-center w-full p-1.5 rounded-2xl border border-slate-200 bg-[#F8FAFC] shadow-xs focus-within:border-[#1A56DB] focus-within:bg-white transition-all">
-                    <input
-                      type="email"
-                      required
-                      data-testid="early-access-email-input"
-                      value={email}
-                      disabled={isSubmitting}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email address"
-                      autoFocus
-                      className="flex-1 px-3 py-2 bg-transparent text-xs sm:text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none disabled:opacity-60"
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      data-testid="early-access-submit-button"
-                      className="px-4 py-2 rounded-xl bg-[#0C1A30] hover:bg-[#1A56DB] text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer shrink-0 shadow-xs active:scale-95 disabled:opacity-70"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
-                          <span>Joining...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Join List</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  {errorMessage && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 text-[11px] text-rose-600 flex items-center gap-1"
-                    >
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                      <span>{errorMessage}</span>
-                    </motion.div>
-                  )}
-                </motion.form>
-              )}
-            </AnimatePresence>
+          /* Step 2 & 3: Pill-shaped Waitlist Input with Fluid Interaction & Animation */
+          <div className="w-full flex justify-center py-1">
+            <WaitlistPillInput
+              autoFocus
+              placeholder="Enter your email"
+              buttonText="Join Waitlist"
+              onSuccess={(submittedEmail) => {
+                if (onSuccess) onSuccess(submittedEmail);
+              }}
+            />
           </div>
         )}
       </div>
