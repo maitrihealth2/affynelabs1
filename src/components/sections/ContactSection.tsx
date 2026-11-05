@@ -53,7 +53,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
   return (
     <section
       id="contact"
-      style={{ scrollSnapAlign: 'center' }}
+      style={{ scrollSnapAlign: 'start' }}
       className="relative w-full min-h-screen flex flex-col overflow-hidden select-none"
     >
       {/* Background — continuous near-white from Mythri's exit */}
