@@ -16,12 +16,12 @@ export const WhoWeAreSection: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Top Clean Mist Division: Creates a deliberate, crisp breathing transition from Hero */}
+        {/* Top blend: transparent at top so the hero image flows in naturally, fades to section bg */}
         <div
-          className="absolute top-0 left-0 right-0 h-32 sm:h-44 md:h-52 pointer-events-none z-10"
+          className="absolute top-0 left-0 right-0 h-28 sm:h-36 md:h-44 pointer-events-none z-10"
           style={{
             background:
-              'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.95) 25%, rgba(255,255,255,0.5) 65%, rgba(255,255,255,0) 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.7) 75%, rgba(255,255,255,0) 100%)',
           }}
           aria-hidden="true"
         />

@@ -70,12 +70,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       }`}
     >
       {/* 
-        Border Frame Container: a minimal inset border around the hero scene.
-        No glass/shadow — just a clean thin perimeter line.
+        Border Frame: top + left + right only — no bottom edge, no rounded bottom corners.
+        The image bleeds to the section bottom edge so there is zero gap into WhoWeAre.
       */}
       <div
-        className="absolute inset-1 rounded-xl overflow-hidden pointer-events-none z-0"
-        style={{ border: '1px solid rgba(255,255,255,0.18)' }}
+        className="absolute top-1 left-1 right-1 bottom-0 rounded-t-xl overflow-hidden pointer-events-none z-0"
+        style={{ borderTop: '1px solid rgba(255,255,255,0.18)', borderLeft: '1px solid rgba(255,255,255,0.18)', borderRight: '1px solid rgba(255,255,255,0.18)' }}
       >
         {/* Layer 0: Scenery Background */}
         <motion.img
@@ -94,8 +94,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         />
 
         {/* 
-          Layer 2: Foreground Character Cutout & Meadow Grass:
-          Ensures the character maintains authentic 3D spatial depth on top of 'affynelabs'
+          Layer 2: Foreground Character Cutout & Meadow Grass
         */}
         <motion.img
           src="/assets/Serene_Meadow_Foreground_Character.png"
@@ -104,16 +103,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           style={{ scale: backgroundScale }}
           className="absolute inset-0 w-full h-full object-cover object-bottom sm:object-[center_bottom] scale-[1.20] sm:scale-[1.14] md:scale-100 origin-[50%_80%] md:origin-bottom -translate-y-4 sm:-translate-y-5 md:translate-y-0 pointer-events-none select-none z-20 transition-transform duration-700 ease-out"
           loading="eager"
-        />
-
-        {/* Ethereal morning mist dissolve seamlessly transitioning into Section 02 (#ffffff) */}
-        <div
-          className="absolute -bottom-[2px] left-0 right-0 h-36 sm:h-48 md:h-60 pointer-events-none z-25"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.3) 45%, rgba(255,255,255,0.68) 70%, rgba(255,255,255,0.92) 88%, #ffffff 100%)',
-          }}
-          aria-hidden="true"
         />
       </div>
 
