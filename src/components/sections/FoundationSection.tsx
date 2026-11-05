@@ -82,31 +82,31 @@ export const FoundationSection: React.FC = () => {
       style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 flex flex-col justify-center overflow-hidden select-none bg-[#FBFBFE]"
     >
-      {/* Background: Authentic Abstract Pastel Waves and Arcs */}
+      {/* Background: Geometric Soft Blue Wave Artwork */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
-          src="/assets/abstract_pastel_waves_arcs.png"
+          src="/assets/foundation_bg.png"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Top Soft Ethereal Blend */}
+        {/* Top Soft Blend: Seamless continuation from Who We Are */}
         <div
-          className="absolute top-0 left-0 right-0 h-24 sm:h-28 md:h-32 pointer-events-none z-10"
+          className="absolute top-0 left-0 right-0 h-24 sm:h-32 pointer-events-none z-10"
           style={{
             background:
-              'linear-gradient(to bottom, #E5E5FE 0%, rgba(229,229,254,0.85) 20%, rgba(229,229,254,0.4) 60%, rgba(229,229,254,0) 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)',
           }}
           aria-hidden="true"
         />
 
         {/* Bottom Soft Dissolve into What We Do (#ffffff) */}
         <div
-          className="absolute -bottom-[2px] left-0 right-0 h-16 sm:h-20 md:h-24 pointer-events-none z-10"
+          className="absolute -bottom-[2px] left-0 right-0 h-24 sm:h-32 pointer-events-none z-10"
           style={{
             background:
-              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 30%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0.95) 90%, #ffffff 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.8) 70%, #ffffff 100%)',
           }}
           aria-hidden="true"
         />

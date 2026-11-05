@@ -7,30 +7,30 @@ export const WhoWeAreSection: React.FC = () => {
       style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen lg:h-screen lg:max-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:pt-28 pb-10 sm:pb-16 lg:pb-20 flex flex-col justify-between overflow-hidden select-none bg-[#FBFBFE]"
     >
-      {/* Background: Authentic Pastel Lavender Wave Gradient */}
+      {/* Background: Soft Ethereal Blue Wave Artwork */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
-          src="/assets/pastel_lavender_wave_gradient.png"
+          src="/assets/whoweare_bg.png"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Top: fully transparent — hero's bottom gradient already dissolves into this bg colour */}
+        {/* Top: subtle ambient transition from hero */}
         <div
-          className="absolute top-0 left-0 right-0 h-20 pointer-events-none z-10"
+          className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-10"
           style={{
-            background: 'linear-gradient(to bottom, #FBFBFE 0%, rgba(251,251,254,0) 100%)',
+            background: 'linear-gradient(to bottom, rgba(251,251,254,0.6) 0%, rgba(251,251,254,0) 100%)',
           }}
           aria-hidden="true"
         />
 
-        {/* Bottom Soft Ethereal Blend: Bridges cleanly into Foundation */}
+        {/* Bottom Soft Dissolve: Bridges cleanly into Foundation */}
         <div
-          className="absolute -bottom-[2px] left-0 right-0 h-20 sm:h-28 md:h-32 pointer-events-none z-10"
+          className="absolute -bottom-[2px] left-0 right-0 h-24 sm:h-32 pointer-events-none z-10"
           style={{
             background:
-              'linear-gradient(to bottom, rgba(229,229,254,0) 0%, rgba(229,229,254,0.35) 40%, rgba(229,229,254,0.85) 85%, #E5E5FE 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.7) 100%)',
           }}
           aria-hidden="true"
         />
