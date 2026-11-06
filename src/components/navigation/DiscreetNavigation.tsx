@@ -58,7 +58,7 @@ export const DiscreetNavigation: React.FC<DiscreetNavigationProps> = ({
     setIsMenuOpen(false);
   };
 
-  const isNavActive = isHeroActive || scrollProgress > 0.02 || heroScrollProgress > 0.04;
+  const isNavActive = isHeroActive;
 
   return (
     <>

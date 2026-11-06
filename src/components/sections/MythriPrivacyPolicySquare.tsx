@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Check, X, Lock, Unlock } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { motion } from 'motion/react';
+import { Check, X } from 'lucide-react';
 import { WaitlistPillInput } from '../ui/WaitlistPillInput';
 
 interface MythriPrivacyPolicySquareProps {
@@ -22,7 +22,7 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
   // Detect when user scrolls to the bottom of the privacy policy
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
-    const threshold = 35;
+    const threshold = 40;
     const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight <= threshold;
     if (isAtBottom && !hasScrolledToBottom) {
       setHasScrolledToBottom(true);
@@ -33,44 +33,37 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.92, x: 24 }}
-      animate={{ opacity: 1, scale: 1, x: 0 }}
-      exit={{ opacity: 0, scale: 0.92, x: 24 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full max-w-[480px] sm:max-w-[500px] lg:max-w-[520px] aspect-square rounded-3xl bg-white/95 backdrop-blur-2xl border border-slate-200/90 shadow-[0_20px_60px_rgba(12,26,48,0.12)] p-5 sm:p-6 flex flex-col justify-between overflow-hidden select-none z-30"
-      style={{
-        boxShadow: '0 24px 64px -12px rgba(12, 26, 48, 0.16), 0 0 0 1px rgba(226, 232, 240, 0.8)',
-      }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 12 }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-full max-w-[480px] sm:max-w-[500px] lg:max-w-[520px] aspect-square rounded-2xl bg-white border border-slate-200 shadow-[0_8px_32px_rgba(12,26,48,0.10)] p-5 sm:p-6 flex flex-col overflow-hidden select-none z-30"
     >
-      {/* Top Header: Title, Status Badge, and Close Button */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-2 h-2 rounded-full bg-[#1A56DB] animate-pulse" />
-          <h3 className="text-sm sm:text-base font-bold text-[#0C1A30] tracking-tight">
-            Privacy Policy · Mythri
+      {/* Top Header: Title, Status Indicator, and Close Button */}
+      <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 shrink-0">
+        <div className="flex items-start flex-col gap-0.5">
+          <h3 className="text-sm font-semibold text-[#0C1A30] tracking-tight leading-none">
+            Privacy Policy
           </h3>
+          <span className="text-[11px] text-slate-400 font-medium">Mythri Companion · v1.0</span>
         </div>
 
         <div className="flex items-center gap-2">
-          {!hasScrolledToBottom && !isAgreed ? (
-            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#64748B] bg-slate-100 px-2.5 py-0.5 rounded-full">
-              <Lock className="w-3 h-3 text-[#94A3B8]" />
-              <span>Scroll to unlock</span>
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-              <Unlock className="w-3 h-3 text-emerald-600" />
-              <span>Unlocked</span>
-            </span>
-          )}
+          <span className={`inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${
+            hasScrolledToBottom || isAgreed
+              ? 'text-emerald-700 bg-emerald-50'
+              : 'text-slate-400 bg-slate-50'
+          }`}>
+            {hasScrolledToBottom || isAgreed ? '● Read' : '○ Unread'}
+          </span>
 
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="p-1 rounded text-slate-300 hover:text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
             aria-label="Close Privacy Policy"
             title="Close"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -79,8 +72,8 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="flex-1 my-3 overflow-y-auto pr-2 text-xs sm:text-[13px] text-[#334155] leading-relaxed space-y-4 select-text custom-policy-scroll"
-        style={{ scrollbarWidth: 'thin', scrollbarColor: '#CBD5E1 transparent' }}
+        className="flex-1 mt-3.5 mb-3 overflow-y-auto text-[11.5px] text-[#475569] leading-[1.65] space-y-3.5 select-text"
+        style={{ scrollbarWidth: 'thin', scrollbarColor: '#E2E8F0 transparent', paddingRight: '10px' }}
       >
         <div>
           <h4 className="font-bold text-[#0C1A30] text-sm mb-1">1. Introduction</h4>
@@ -299,51 +292,49 @@ export const MythriPrivacyPolicySquare: React.FC<MythriPrivacyPolicySquareProps>
         </div>
       </div>
 
-      {/* Bottom Interactive Area: Checkbox -> Email Input -> Squeeze Circle Loading -> Tick */}
+      {/* Bottom Interactive Area: Checkbox -> Email Input -> Spinner -> Success */}
       <div className="pt-3 border-t border-slate-100 shrink-0">
         {!isAgreed ? (
-          /* Step 1: Checkbox to agree to Privacy Policy (Activated only when scrolled to bottom) */
-          <div className="space-y-2">
-            <button
-              type="button"
-              data-testid="agree-checkbox-button"
-              disabled={!hasScrolledToBottom}
-              onClick={() => {
-                if (hasScrolledToBottom) setIsAgreed(true);
-              }}
-              className={`w-full flex items-center gap-3 p-3 rounded-2xl border transition-all text-left select-none ${
+          /* Step 1: Checkbox to agree to Privacy Policy */
+          <button
+            type="button"
+            data-testid="agree-checkbox-button"
+            disabled={!hasScrolledToBottom}
+            onClick={() => {
+              if (hasScrolledToBottom) setIsAgreed(true);
+            }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors text-left select-none ${
+              !hasScrolledToBottom
+                ? 'bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed'
+                : 'bg-white border-slate-300 text-[#0C1A30] hover:border-slate-400 cursor-pointer'
+            }`}
+          >
+            <div
+              className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border transition-colors ${
                 !hasScrolledToBottom
-                  ? 'bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed opacity-75'
-                  : 'bg-blue-50/80 border-[#1A56DB]/40 text-[#0C1A30] hover:bg-blue-50 cursor-pointer shadow-xs'
+                  ? 'border-slate-300 bg-slate-50'
+                  : isAgreed
+                  ? 'bg-[#0C1A30] border-[#0C1A30] text-white'
+                  : 'border-slate-400 bg-white'
               }`}
             >
-              <div
-                className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 border transition-colors ${
-                  !hasScrolledToBottom
-                    ? 'border-slate-300 bg-white'
-                    : isAgreed
-                    ? 'bg-[#1A56DB] border-[#1A56DB] text-white'
-                    : 'border-[#1A56DB] bg-white'
-                }`}
-              >
-                {isAgreed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-              </div>
+              {isAgreed && <Check className="w-2.5 h-2.5 stroke-[3]" />}
+            </div>
 
-              <div className="text-xs leading-snug">
-                <span className="font-semibold block">
-                  I agree to the Mythri Privacy Policy
+            <div className="text-xs leading-snug">
+              <span className="font-medium block text-inherit">
+                I have read and agree to the Mythri Privacy Policy
+              </span>
+              {!hasScrolledToBottom && (
+                <span className="text-[10.5px] text-slate-400 block mt-0.5">
+                  Scroll through the policy above to enable
                 </span>
-                <span className="text-[11px] text-[#64748B] block mt-0.5">
-                  {!hasScrolledToBottom
-                    ? 'Please scroll through the policy above to enable agreement'
-                    : 'Click to confirm agreement & proceed to early access'}
-                </span>
-              </div>
-            </button>
-          </div>
+              )}
+            </div>
+          </button>
         ) : (
-          /* Step 2 & 3: Pill-shaped Waitlist Input with Fluid Interaction & Animation */
-          <div className="w-full flex justify-center py-1">
+          /* Step 2: Pill-shaped Waitlist Input with animation */
+          <div className="w-full">
             <WaitlistPillInput
               autoFocus
               placeholder="Enter your email"

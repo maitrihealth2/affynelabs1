@@ -22,6 +22,32 @@ export default function App() {
   const [isHeroReady, setIsHeroReady] = useState<boolean>(false);
   const [isHeroActive, setIsHeroActive] = useState<boolean>(false);
 
+  // Ensure reload always starts at top and resets to the intro screen
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
+  // Physically lock scrolling until the user enters from the initial screen
+  useEffect(() => {
+    if (!isHeroActive) {
+      window.scrollTo(0, 0);
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [isHeroActive]);
+
   // Smooth navigation to a specific section
   const scrollToSection = useCallback((sectionId: SectionId) => {
     setActiveSection(sectionId);

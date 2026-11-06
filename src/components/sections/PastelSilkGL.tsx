@@ -197,13 +197,13 @@ export default function PastelSilkGL({
       mouse.px = mouse.py = null;
     };
 
-    wrap.addEventListener('pointermove', onMove);
-    wrap.addEventListener('pointerdown', onMove);
+    wrap.addEventListener('pointermove', onMove, { passive: true });
+    wrap.addEventListener('pointerdown', onMove, { passive: true });
     wrap.addEventListener('pointerleave', onLeave);
     const onPointerUp = (e: PointerEvent) => {
       if (e.pointerType === 'touch') onLeave();
     };
-    wrap.addEventListener('pointerup', onPointerUp);
+    wrap.addEventListener('pointerup', onPointerUp, { passive: true });
 
     const step = () => {
       const aspect = w / h, R2 = RADIUS * RADIUS;
@@ -288,7 +288,7 @@ export default function PastelSilkGL({
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-        touchAction: 'none',
+        touchAction: 'pan-y', // allow vertical scroll on mobile, still capture horizontal/pointer for effect
         ...style,
       }}
     >

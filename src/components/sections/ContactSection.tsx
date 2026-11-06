@@ -53,7 +53,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
   return (
     <section
       id="contact"
-      style={{ scrollSnapAlign: 'start' }}
       className="relative w-full min-h-screen flex flex-col overflow-hidden select-none"
     >
       {/* Background — continuous near-white from Mythri's exit */}
@@ -248,23 +247,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                       )}
                     </AnimatePresence>
 
-                    {/* Footer row: privacy note + submit */}
-                    <div className="pt-7 flex items-center justify-between gap-4">
-                      <p className="text-[11px] text-[#94A3B8] leading-snug">
-                        By submitting you agree to our{' '}
-                        <button
-                          type="button"
-                          onClick={() => setIsPolicyModalOpen(true)}
-                          className="text-[#1D4E89] hover:underline cursor-pointer"
-                        >
-                          Privacy Policy
-                        </button>
-                        .
-                      </p>
+                    {/* Footer row: privacy note + submit — stacked cleanly */}
+                    <div className="pt-6 flex flex-col gap-3">
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="shrink-0 inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#0C1A30] hover:bg-[#1D4E89] text-white text-sm font-semibold transition-all shadow-md active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                        className="w-full inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#0C1A30] hover:bg-[#1D4E89] text-white text-sm font-semibold transition-all shadow-md active:scale-[0.98] cursor-pointer disabled:opacity-50"
                       >
                         {isSubmitting ? (
                           <>
@@ -278,6 +266,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onNavigate }) =>
                           </>
                         )}
                       </button>
+                      <p className="text-[11px] text-[#94A3B8] leading-snug text-center">
+                        By submitting you agree to our{' '}
+                        <button
+                          type="button"
+                          onClick={() => setIsPolicyModalOpen(true)}
+                          className="text-[#1D4E89] hover:underline cursor-pointer"
+                        >
+                          Privacy Policy
+                        </button>
+                        .
+                      </p>
                     </div>
                   </motion.form>
                 )}

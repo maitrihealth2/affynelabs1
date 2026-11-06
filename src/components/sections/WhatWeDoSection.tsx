@@ -82,9 +82,37 @@ export const WhatWeDoSection: React.FC = () => {
   return (
     <section
       id="what-we-do"
-      style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 bg-white flex flex-col justify-center overflow-hidden select-none"
     >
+      {/* ── Decorative CSS background elements ── */}
+      {/* Large soft cerulean orb — top-right quadrant */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 -right-32 w-[520px] h-[520px] rounded-full opacity-[0.07]"
+        style={{
+          background: 'radial-gradient(circle at 40% 40%, #4A9EE8 0%, #A8D4FF 55%, transparent 75%)',
+          filter: 'blur(60px)',
+        }}
+      />
+      {/* Mid-left periwinkle orb */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 -left-24 w-[360px] h-[360px] rounded-full opacity-[0.055]"
+        style={{
+          background: 'radial-gradient(circle at 60% 50%, #6B8FD4 0%, #BDD4F8 60%, transparent 80%)',
+          filter: 'blur(72px)',
+          transform: 'translateY(-50%)',
+        }}
+      />
+      {/* Bottom-right accent — small powder blue */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 right-16 w-[280px] h-[280px] rounded-full opacity-[0.06]"
+        style={{
+          background: 'radial-gradient(circle, #93C5FD 0%, #DBEAFE 60%, transparent 80%)',
+          filter: 'blur(55px)',
+        }}
+      />
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center my-auto">
         {/* Section Header */}
         <div className="max-w-3xl mb-1 sm:mb-4">
@@ -232,7 +260,7 @@ export const WhatWeDoSection: React.FC = () => {
           </div>
 
           {/* RIGHT: Active Activity Presentation & Details */}
-          <div className="lg:col-span-6 lg:pl-8 lg:border-l border-slate-200/70 pt-2 lg:pt-0">
+          <div className="lg:col-span-6 lg:pl-10 pt-2 lg:pt-0">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeActivity.id}

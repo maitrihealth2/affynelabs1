@@ -24,21 +24,57 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     if (onActivateHero) onActivateHero();
     setInternalIsHeroActive(true);
     if (onHeroReady) onHeroReady();
+    // Unlock scrolling when user enters
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.documentElement.style.overscrollBehavior = '';
   }, [onActivateHero, onHeroReady]);
+
+  // Lock scroll while gate is showing, unlock when hero is activated
+  useEffect(() => {
+    if (!isHeroActive) {
+      // Block all scrolling on the document
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overscrollBehavior = 'none';
+    } else {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overscrollBehavior = '';
+    }
+    return () => {
+      // Always cleanup on unmount
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overscrollBehavior = '';
+    };
+  }, [isHeroActive]);
 
   useEffect(() => {
     if (isHeroActive) return;
+    // Only listen for explicit click/touch/key to activate — NOT scroll events
     const handleClick = () => activateHero();
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') activateHero();
+      if (e.key === 'Enter' || e.key === ' ') activateHero();
+      // Block ArrowDown from scrolling on the gate
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'PageDown' || e.key === 'PageUp') {
+        e.preventDefault();
+      }
     };
+    // Block wheel/touch scroll while gate is showing
+    const handleWheel = (e: WheelEvent) => { e.preventDefault(); };
+    const handleTouchMove = (e: TouchEvent) => { e.preventDefault(); };
     window.addEventListener('click', handleClick);
-    window.addEventListener('touchend', handleClick);
+    window.addEventListener('touchend', handleClick, { passive: true });
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     return () => {
       window.removeEventListener('click', handleClick);
       window.removeEventListener('touchend', handleClick);
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
   }, [isHeroActive, activateHero]);
 
@@ -51,7 +87,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     <section
       id="home"
       onClick={activateHero}
-      style={{ scrollSnapAlign: 'start' }}
       className={`relative h-screen min-h-[560px] md:min-h-[640px] w-full p-2.5 sm:p-3 md:p-4 flex flex-col items-center justify-center overflow-hidden select-none bg-[#F7F8FA] ${
         !isHeroActive ? 'cursor-pointer' : 'cursor-default'
       }`}

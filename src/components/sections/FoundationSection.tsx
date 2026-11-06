@@ -79,10 +79,9 @@ export const FoundationSection: React.FC = () => {
   return (
     <section
       id="foundation"
-      style={{ scrollSnapAlign: 'center' }}
       className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 flex flex-col justify-center overflow-hidden select-none bg-[#FBFBFE]"
     >
-      {/* Background: Geometric Soft Blue Wave Artwork */}
+      {/* Background: Dreamy Ethereal Horizon Artwork with Subtle Dawn Warmth */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
           src="/assets/foundation_bg.png"
@@ -91,22 +90,12 @@ export const FoundationSection: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Top Soft Blend: Seamless continuation from Who We Are */}
+        {/* Bottom soft dissolve into What We Do (#ffffff) — generous, seamless transition */}
         <div
-          className="absolute top-0 left-0 right-0 h-24 sm:h-32 pointer-events-none z-10"
+          className="absolute bottom-0 left-0 right-0 h-36 sm:h-48 pointer-events-none z-10"
           style={{
             background:
-              'linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%)',
-          }}
-          aria-hidden="true"
-        />
-
-        {/* Bottom Soft Dissolve into What We Do (#ffffff) */}
-        <div
-          className="absolute -bottom-[2px] left-0 right-0 h-24 sm:h-32 pointer-events-none z-10"
-          style={{
-            background:
-              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.8) 70%, #ffffff 100%)',
+              'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.8) 75%, #ffffff 100%)',
           }}
           aria-hidden="true"
         />
@@ -131,7 +120,7 @@ export const FoundationSection: React.FC = () => {
             </p>
 
             {/* Philosophy Editorial Statement (Desktop layout) */}
-            <div className="hidden lg:block pt-6 sm:pt-8 space-y-3 max-w-xl border-t border-slate-200/70 mt-6 sm:mt-8">
+            <div className="hidden lg:block pt-6 sm:pt-8 space-y-3 max-w-xl border-t border-slate-200/40 mt-6 sm:mt-8">
               <h3 className="text-xl sm:text-2xl lg:text-[25px] tracking-tight leading-[1.22] text-[#0C1A30]">
                 <span className="italic font-normal">Peace, harmony, simplicity,</span>{' '}
                 <br className="hidden sm:inline" />
