@@ -100,7 +100,7 @@ export const DiscreetNavigation: React.FC<DiscreetNavigationProps> = ({
               className="flex flex-col items-center justify-center text-center focus:outline-none cursor-pointer w-screen max-w-7xl px-4"
               aria-label="Enter Affyne Labs"
             >
-              <span className="text-[17vw] sm:text-[15vw] md:text-[13vw] lg:text-[11.5vw] xl:text-[160px] 2xl:text-[185px] font-black tracking-[-0.04em] leading-none text-white drop-shadow-[0_4px_32px_rgba(10,30,60,0.22)] block">
+              <span className="text-[clamp(2.1rem,14vw,11.5rem)] font-black tracking-[-0.04em] leading-none text-white drop-shadow-[0_4px_32px_rgba(10,30,60,0.22)] block max-w-full px-2">
                 affynelabs
               </span>
             </motion.button>
@@ -243,7 +243,7 @@ export const DiscreetNavigation: React.FC<DiscreetNavigationProps> = ({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="sm:hidden absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-64 rounded-2xl bg-white/98 backdrop-blur-xl border border-slate-200/90 shadow-2xl p-2.5 flex flex-col gap-1 z-30"
+                    className="sm:hidden absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-64 max-w-[calc(100vw-24px)] rounded-2xl bg-white/98 backdrop-blur-xl border border-slate-200/90 shadow-2xl p-2.5 flex flex-col gap-1 z-30"
                   >
                     <button
                       type="button"

@@ -16,7 +16,8 @@ export const WaitlistPillInput: React.FC<WaitlistPillInputProps> = ({
   autoFocus = false,
 }) => {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'typing' | 'loading' | 'success' | 'error'>('idle');
+  type InputStatus = 'idle' | 'typing' | 'loading' | 'success' | 'error';
+  const [status, setStatus] = useState<InputStatus>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -104,7 +105,7 @@ export const WaitlistPillInput: React.FC<WaitlistPillInputProps> = ({
               type="email"
               value={email}
               data-testid="early-access-email-input"
-              disabled={status === 'loading'}
+              disabled={false}
               onChange={(e) => {
                 setEmail(e.target.value);
                 if (status === 'error') {
@@ -116,18 +117,18 @@ export const WaitlistPillInput: React.FC<WaitlistPillInputProps> = ({
               }}
               placeholder={placeholder}
               aria-label="Email address"
-              className="flex-1 h-full px-3.5 bg-transparent text-xs sm:text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none transition-colors"
+              className="flex-1 min-w-0 h-full px-2.5 sm:px-3.5 bg-transparent text-xs sm:text-sm text-[#0C1A30] placeholder:text-[#94A3B8] focus:outline-none transition-colors"
             />
 
             <button
               type="submit"
               data-testid="early-access-submit-button"
-              disabled={status === 'loading'}
+              disabled={false}
               onClick={(e) => {
                 e.preventDefault();
                 handleSubmit(e);
               }}
-              className="h-full px-5 rounded-full bg-[#0C1A30] hover:bg-[#1A56DB] active:scale-[0.98] text-white text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 cursor-pointer shrink-0 disabled:opacity-60 shadow-xs flex items-center justify-center whitespace-nowrap"
+              className="h-full px-3.5 sm:px-5 rounded-full bg-[#0C1A30] hover:bg-[#1A56DB] active:scale-[0.98] text-white text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 cursor-pointer shrink-0 disabled:opacity-60 shadow-xs flex items-center justify-center whitespace-nowrap"
             >
               <span>{buttonText}</span>
             </button>

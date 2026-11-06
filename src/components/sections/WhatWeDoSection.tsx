@@ -58,22 +58,20 @@ export const WhatWeDoSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Auto-switch in a continuous loop every 3 seconds
-  // Topics come DOWN from the left side in a semi-circle format.
-  // When a topic finishes, it moves down below the line and the next topic comes down into place.
+  // Auto-switch every 3.5 seconds
   useEffect(() => {
     if (isPaused) return;
-
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % ACTIVITIES.length);
-    }, 3000);
-
+    }, 3500);
     return () => clearInterval(timer);
   }, [isPaused]);
 
@@ -82,207 +80,134 @@ export const WhatWeDoSection: React.FC = () => {
   return (
     <section
       id="what-we-do"
-      className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 bg-white flex flex-col justify-center overflow-hidden select-none"
+      className="relative w-full min-h-0 sm:min-h-screen px-4 sm:px-8 md:px-12 lg:px-20 py-14 sm:py-24 lg:py-18 xl:py-20 bg-white flex flex-col justify-center select-none overflow-hidden"
     >
-      {/* ── Decorative CSS background elements ── */}
-      {/* Large soft cerulean orb — top-right quadrant */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -right-32 w-[520px] h-[520px] rounded-full opacity-[0.07]"
-        style={{
-          background: 'radial-gradient(circle at 40% 40%, #4A9EE8 0%, #A8D4FF 55%, transparent 75%)',
-          filter: 'blur(60px)',
-        }}
-      />
-      {/* Mid-left periwinkle orb */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 -left-24 w-[360px] h-[360px] rounded-full opacity-[0.055]"
-        style={{
-          background: 'radial-gradient(circle at 60% 50%, #6B8FD4 0%, #BDD4F8 60%, transparent 80%)',
-          filter: 'blur(72px)',
-          transform: 'translateY(-50%)',
-        }}
-      />
-      {/* Bottom-right accent — small powder blue */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 right-16 w-[280px] h-[280px] rounded-full opacity-[0.06]"
-        style={{
-          background: 'radial-gradient(circle, #93C5FD 0%, #DBEAFE 60%, transparent 80%)',
-          filter: 'blur(55px)',
-        }}
-      />
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center my-auto">
-        {/* Section Header */}
-        <div className="max-w-3xl mb-1 sm:mb-4">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[54px] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-[#0C1A30] mb-2 sm:mb-3">
+      <div className="max-w-7xl mx-auto w-full my-auto space-y-6 sm:space-y-10 lg:space-y-10">
+        
+        {/* Section Header with Staggered Entrance */}
+        <div className="max-w-3xl space-y-2.5 sm:space-y-3">
+          <motion.h2
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-[clamp(1.75rem,5.5vw,3.35rem)] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-[#0C1A30]"
+          >
             Engineering technology that respects{' '}
             <span className="text-[#1D4E89] italic">human fragility</span>.
-          </h2>
-          <p className="text-xs sm:text-base text-[#475569] leading-relaxed max-w-2xl">
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="text-sm sm:text-base text-[#475569] leading-relaxed max-w-2xl"
+          >
             Five core engineering disciplines developed with clinical rigor to protect patient sovereignty and deliver meaningful care.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Central Arrangement: Semi-Circle Rotating Topics on Left, Content Details on Right */}
-        <div
-          className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 lg:gap-14 items-center my-auto py-1"
+        {/* Central Arrangement: Rotating Topic Wheel (Mobile & Desktop) + Content Details on Right */}
+        <motion.div
+          initial={{ opacity: 0, y: 26 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col lg:grid lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-14 items-stretch lg:items-center"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* LEFT: Semi-Circle Rotating Carousel moving downwards */}
-          <div className="lg:col-span-6 relative h-[180px] sm:h-[240px] lg:h-[400px] flex items-center overflow-visible">
-            {/* Ambient Semi-Circle Track SVG */}
-            <svg
-              className="absolute -left-3 top-1/2 -translate-y-1/2 w-48 h-full pointer-events-none -z-0 opacity-40"
-              viewBox="0 0 100 380"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M 5 20 Q 70 190 5 360"
-                stroke="#CBD5E1"
-                strokeWidth="1.5"
-                strokeDasharray="4 4"
-              />
-            </svg>
+          {/* Rotating topic wheel — animated identically on mobile & desktop */}
+          <div className="lg:col-span-6 relative flex flex-col justify-center">
+            <div className="relative h-[190px] sm:h-[260px] lg:h-[380px] w-full flex items-center overflow-hidden lg:overflow-visible">
+              {/* Ambient arc track */}
+              <svg
+                className="absolute -left-2 sm:-left-3 top-1/2 -translate-y-1/2 w-36 sm:w-48 h-full pointer-events-none -z-0 opacity-40"
+                viewBox="0 0 100 380"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M 5 20 Q 70 190 5 360"
+                  stroke="#CBD5E1"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 4"
+                />
+              </svg>
 
-            <div className="relative w-full h-full flex items-center">
-              {ACTIVITIES.map((item, idx) => {
-                let signedOffset = activeIndex - idx;
-                if (signedOffset > 2) signedOffset -= ACTIVITIES.length;
-                if (signedOffset < -2) signedOffset += ACTIVITIES.length;
+              <div className="relative w-full h-full flex items-center">
+                {ACTIVITIES.map((item, idx) => {
+                  let signedOffset = activeIndex - idx;
+                  if (signedOffset > 2) signedOffset -= ACTIVITIES.length;
+                  if (signedOffset < -2) signedOffset += ACTIVITIES.length;
+                  const isActive = signedOffset === 0;
 
-                const isActive = signedOffset === 0;
-
-                // Responsive semi-circle coordinates
-                let y = 0;
-                let x = 0;
-                let scale = 1;
-                let opacity = 1;
-
-                if (isMobile) {
-                  // Compact coordinates for mobile screen so both wheel & details fit comfortably
-                  if (signedOffset === 0) {
-                    y = 0;
-                    x = 16;
-                    scale = 1.05;
-                    opacity = 1;
-                  } else if (signedOffset === 1) {
-                    y = 44;
-                    x = 6;
-                    scale = 0.90;
-                    opacity = 0.55;
-                  } else if (signedOffset === 2) {
-                    y = 86;
-                    x = -8;
-                    scale = 0.80;
-                    opacity = 0.2;
-                  } else if (signedOffset === -1) {
-                    y = -44;
-                    x = 6;
-                    scale = 0.90;
-                    opacity = 0.55;
-                  } else if (signedOffset === -2) {
-                    y = -86;
-                    x = -8;
-                    scale = 0.80;
-                    opacity = 0.2;
+                  // Mobile vs Desktop coordinates
+                  let y = 0, x = 0, scale = 1, opacity = 1;
+                  if (isMobile) {
+                    if (signedOffset === 0) { y = 0; x = 16; scale = 1.05; opacity = 1; }
+                    else if (signedOffset === 1) { y = 46; x = 6; scale = 0.90; opacity = 0.55; }
+                    else if (signedOffset === 2) { y = 88; x = -4; scale = 0.80; opacity = 0.2; }
+                    else if (signedOffset === -1) { y = -46; x = 6; scale = 0.90; opacity = 0.55; }
+                    else if (signedOffset === -2) { y = -88; x = -4; scale = 0.80; opacity = 0.2; }
+                  } else {
+                    if (signedOffset === 0) { y = 0; x = 32; scale = 1.05; opacity = 1; }
+                    else if (signedOffset === 1) { y = 72; x = 12; scale = 0.94; opacity = 0.65; }
+                    else if (signedOffset === 2) { y = 138; x = -16; scale = 0.86; opacity = 0.38; }
+                    else if (signedOffset === -1) { y = -72; x = 12; scale = 0.94; opacity = 0.65; }
+                    else if (signedOffset === -2) { y = -138; x = -16; scale = 0.86; opacity = 0.38; }
                   }
-                } else {
-                  // Full coordinates for desktop
-                  if (signedOffset === 0) {
-                    y = 0;
-                    x = 32;
-                    scale = 1.06;
-                    opacity = 1;
-                  } else if (signedOffset === 1) {
-                    y = 74;
-                    x = 12;
-                    scale = 0.94;
-                    opacity = 0.65;
-                  } else if (signedOffset === 2) {
-                    y = 142;
-                    x = -16;
-                    scale = 0.86;
-                    opacity = 0.38;
-                  } else if (signedOffset === -1) {
-                    y = -74;
-                    x = 12;
-                    scale = 0.94;
-                    opacity = 0.65;
-                  } else if (signedOffset === -2) {
-                    y = -142;
-                    x = -16;
-                    scale = 0.86;
-                    opacity = 0.38;
-                  }
-                }
 
-                return (
-                  <motion.button
-                    key={item.id}
-                    onClick={() => setActiveIndex(idx)}
-                    animate={{
-                      y,
-                      x,
-                      scale,
-                      opacity,
-                    }}
-                    transition={{
-                      duration: 0.7,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    style={{
-                      position: 'absolute',
-                      top: '50%',
-                      transformOrigin: 'left center',
-                    }}
-                    className="w-full text-left py-1 sm:py-2 transition-colors duration-200 cursor-pointer block select-none group -translate-y-1/2 focus:outline-none"
-                    aria-label={`Select ${item.title}`}
-                  >
-                    <div className="flex items-center">
+                  return (
+                    <motion.button
+                      key={item.id}
+                      onClick={() => setActiveIndex(idx)}
+                      animate={{ y, x, scale, opacity }}
+                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                      style={{ position: 'absolute', top: '50%', transformOrigin: 'left center' }}
+                      className="max-w-[calc(100%-20px)] text-left py-1 sm:py-2 cursor-pointer block select-none -translate-y-1/2 focus:outline-none"
+                    >
                       <h3
                         className={`font-bold tracking-tight transition-all duration-300 leading-tight ${
                           isActive
-                            ? 'text-xl sm:text-3xl lg:text-[34px] xl:text-[36px] text-[#0C1A30]'
-                            : 'text-sm sm:text-xl lg:text-[25px] xl:text-[27px] text-[#64748B] group-hover:text-[#0C1A30]'
+                            ? 'text-lg sm:text-2xl lg:text-[32px] xl:text-[34px] text-[#0C1A30]'
+                            : 'text-sm sm:text-lg lg:text-[24px] xl:text-[26px] text-[#94A3B8] hover:text-[#475569]'
                         }`}
                       >
                         {item.title}
                       </h3>
-                    </div>
-                  </motion.button>
-                );
-              })}
+                    </motion.button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          {/* RIGHT: Active Activity Presentation & Details */}
-          <div className="lg:col-span-6 lg:pl-10 pt-2 lg:pt-0">
+          {/* RIGHT: Active detail statement (Open Editorial, No Container Box) */}
+          <div className="lg:col-span-6 lg:pl-10 min-w-0">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeActivity.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -14 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-2 sm:space-y-4 max-w-xl"
+                className="space-y-3 sm:space-y-4 max-w-xl min-w-0"
               >
                 {/* Statement Headline */}
-                <h3 className="text-lg sm:text-2xl md:text-3xl lg:text-[36px] font-bold tracking-tight leading-[1.18] sm:leading-[1.16] text-[#0C1A30]">
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-tight leading-[1.18] sm:leading-[1.16] text-[#0C1A30]">
                   {activeActivity.statement}
                 </h3>
 
-                {/* Description Text */}
-                <p className="text-xs sm:text-base lg:text-lg text-[#475569] leading-relaxed pt-0.5 sm:pt-1">
+                {/* Description */}
+                <p className="text-xs sm:text-sm lg:text-base text-[#475569] leading-relaxed">
                   {activeActivity.description}
                 </p>
               </motion.div>
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -22,7 +22,7 @@ export default function App() {
   const [isHeroReady, setIsHeroReady] = useState<boolean>(false);
   const [isHeroActive, setIsHeroActive] = useState<boolean>(false);
 
-  // Ensure reload always starts at top and resets to the intro screen
+  // Always start at top on load
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -32,7 +32,7 @@ export default function App() {
     document.body.scrollTop = 0;
   }, []);
 
-  // Physically lock scrolling until the user enters from the initial screen
+  // Lock scroll only while the initial landing gate is active
   useEffect(() => {
     if (!isHeroActive) {
       window.scrollTo(0, 0);
@@ -48,7 +48,6 @@ export default function App() {
     };
   }, [isHeroActive]);
 
-  // Smooth navigation to a specific section
   const scrollToSection = useCallback((sectionId: SectionId) => {
     setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
@@ -57,7 +56,6 @@ export default function App() {
     }
   }, []);
 
-  // Scroll listener to update progress and active section
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -65,21 +63,11 @@ export default function App() {
       const progress = totalHeight > 0 ? Math.min(1, Math.max(0, scrollY / totalHeight)) : 0;
       setScrollProgress(progress);
 
-      // Hero scroll progress (first viewport height)
       const heroHeight = window.innerHeight;
       const heroProg = Math.min(1, Math.max(0, scrollY / heroHeight));
       setHeroScrollProgress(heroProg);
 
-      // Determine active section based on scroll offsets
-      const sections: SectionId[] = [
-        'home',
-        'who-we-are',
-        'foundation',
-        'what-we-do',
-        'mythri',
-        'contact',
-      ];
-
+      const sections: SectionId[] = ['home', 'who-we-are', 'foundation', 'what-we-do', 'mythri', 'contact'];
       for (const id of sections) {
         const el = document.getElementById(id);
         if (el) {
@@ -94,35 +82,21 @@ export default function App() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <div className="relative min-h-screen bg-[#F7F8FA] text-[#202B38] font-sans antialiased overflow-x-hidden">
-      {/* 
-        Persistent Atmospheric Light Scene (Three.js WebGL)
-        Renders delicate sunlit drifting particles catching morning light with subtle mouse parallax.
-        Fades out cleanly when scrolled past the hero to preserve pure contrast for content sections.
-      */}
+      {/* Persistent WebGL atmospheric scene behind hero */}
       <div
         className={`fixed inset-0 pointer-events-none z-0 transition-opacity duration-500 ${
           heroScrollProgress >= 0.95 ? 'opacity-0' : 'opacity-100'
         }`}
       >
-        <HeroEnvironmentScene
-          scrollProgress={heroScrollProgress}
-          isPortalActive={false}
-        />
+        <HeroEnvironmentScene scrollProgress={heroScrollProgress} isPortalActive={false} />
       </div>
 
-      {/* 
-        Morphing Top-Center Brand Navigation
-        Starts centered & monumental behind character -> Morphs to top-center menu button
-        Opens bilateral navigation options equally divided on both sides in one line
-      */}
+      {/* Navigation */}
       <DiscreetNavigation
         activeSection={activeSection}
         onNavigate={scrollToSection}
@@ -132,9 +106,9 @@ export default function App() {
         onActivateHero={() => setIsHeroActive(true)}
       />
 
-      {/* Main Experience Flow */}
-      <main className="relative z-10">
-        {/* 01: Home / Hero Experience with Subject Character & Atmospheric Window */}
+      {/* Main Experience Flow with Staggered Per-Element Reveals */}
+      <main className="relative z-10 w-full min-w-0">
+        {/* 01: Hero Experience */}
         <HeroSection
           onExploreClick={() => scrollToSection('who-we-are')}
           onNavigateSection={scrollToSection}
@@ -143,22 +117,22 @@ export default function App() {
           onActivateHero={() => setIsHeroActive(true)}
         />
 
-        {/* 02: Who We Are (Identity, Integrity, Responsibility) */}
+        {/* 02: Who We Are */}
         <WhoWeAreSection />
 
-        {/* 03: Foundation (Purpose, Vision, Mission, Philosophy) */}
+        {/* 03: Foundation (Architectural 3D Pyramid) */}
         <FoundationSection />
 
-        {/* 04: What We Do (5 Core Activities & Disciplines in Single Desktop Viewport) */}
+        {/* 04: What We Do (Engineering Disciplines) */}
         <WhatWeDoSection />
 
-        {/* 05: Mythri (Early Access & Product Horizon Waiting List) */}
+        {/* 05: Mythri Waiting List */}
         <WaitingListSection />
 
-        {/* 06: Contact Us (Direct Dialogue & Clinical Partnerships) */}
+        {/* 06: Contact Dialogue */}
         <ContactSection onNavigate={scrollToSection} />
 
-        {/* 07: Monumental Brand Finale & Interactive 3D Orbiting Footer */}
+        {/* 07: Monumental Footer */}
         <FooterSection onNavigate={scrollToSection} />
       </main>
     </div>

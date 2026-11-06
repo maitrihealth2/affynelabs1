@@ -87,7 +87,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     <section
       id="home"
       onClick={activateHero}
-      className={`relative h-screen min-h-[560px] md:min-h-[640px] w-full p-2.5 sm:p-3 md:p-4 flex flex-col items-center justify-center overflow-hidden select-none bg-[#F7F8FA] ${
+      className={`relative h-screen min-h-[520px] md:min-h-[640px] w-full p-2 sm:p-3 md:p-4 flex flex-col items-center justify-center overflow-hidden select-none bg-[#F7F8FA] ${
         !isHeroActive ? 'cursor-pointer' : 'cursor-default'
       }`}
     >
@@ -127,7 +127,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         */}
         <motion.div
           style={{ y: contentY, opacity: contentOpacity }}
-          className={`relative z-30 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 text-center flex flex-col items-center justify-center shrink-0 pt-16 sm:pt-18 md:pt-20 pb-[calc(max(38vh,21vw)+24px)] md:pb-[calc(max(37vh,20.8vw)+36px)] transition-all duration-500 ease-out ${
+          className={`relative z-30 w-full max-w-5xl mx-auto px-3 sm:px-6 md:px-8 text-center flex flex-col items-center justify-center shrink-0 pt-14 sm:pt-18 md:pt-20 pb-[calc(max(26vh,15vw)+20px)] md:pb-[calc(max(37vh,20.8vw)+36px)] transition-all duration-500 ease-out ${
             isHeroActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
         >
@@ -138,11 +138,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="mb-[clamp(0.85rem,1.8vh,1.5rem)]"
           >
             <h1
-              className="select-none tracking-[-0.035em] leading-[1.06] font-medium mx-auto max-w-none text-balance text-white text-[clamp(1.75rem,7.4vw,2.35rem)] md:text-[clamp(3.25rem,5.2vw,5.5rem)]"
+              className="select-none tracking-[-0.035em] leading-[1.08] font-medium mx-auto max-w-none text-balance text-white text-[clamp(1.35rem,6.8vw,2.35rem)] md:text-[clamp(3.25rem,5.2vw,5.5rem)]"
               style={{ color: '#FFFFFF' }}
             >
-              <span className="block whitespace-nowrap">Technology should</span>
-              <span className="block whitespace-nowrap font-bold">understand humanity.</span>
+              <span className="block sm:whitespace-nowrap">Technology should</span>
+              <span className="block sm:whitespace-nowrap font-bold">understand humanity.</span>
             </h1>
           </motion.div>
 

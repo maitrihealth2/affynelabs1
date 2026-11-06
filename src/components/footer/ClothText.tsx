@@ -15,7 +15,12 @@ void main(){
 }`;
 
 const FRAG = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
+
 varying vec2 vUv;
 uniform sampler2D uMask;
 uniform float uTime, uAspect, uHover, uFold;
@@ -32,18 +37,21 @@ float noise(vec2 p){
 
 vec2 toMouse(vec2 uv){ return vec2((uv.x - uMouse.x) * uAspect, uv.y - uMouse.y); }
 
-float height(vec2 uv){
+float heightAt(vec2 uv){
   vec2 q = vec2(uv.x * uAspect, uv.y);
-  float t = uTime * 0.35;
-  float h = sin(q.x * 3.0 + t + noise(q * 2.0 + t) * 3.0) * 0.5;
-  h += sin(q.x * 7.0 - q.y * 4.0 - t * 1.3) * 0.25;
-  h += noise(q * 4.0 + vec2(t, -t)) * 0.6;
+  float t = uTime * 0.5;
 
+  // Rich organic cloth waves and folds
+  float h = sin(q.x * 2.8 + t + noise(q * 1.8 + t * 0.6) * 2.4) * 0.45;
+  h += sin(q.x * 5.5 - q.y * 3.5 - t * 1.2) * 0.25;
+  h += noise(q * 3.5 + vec2(t * 0.4, -t * 0.4)) * 0.35;
+
+  // Interactive touch / cursor ripples
   vec2 d = toMouse(uv);
   float r = length(d);
-  float f = exp(-r * r * 1.5) * uHover;
-  h += f * (sin(r * 14.0 - uTime * 3.0) * 0.35 + 0.9);      // ripple + dent under cursor
-  h += dot(normalize(d + 1e-4), uVel) * f * 1.6;            // drag the fabric with motion
+  float f = exp(-r * r * 1.8) * uHover;
+  h += f * (sin(r * 15.0 - uTime * 3.5) * 0.4 + 0.9);
+  h += dot(normalize(d + 1e-4), uVel) * f * 1.6;
   return h;
 }
 
@@ -51,26 +59,35 @@ void main(){
   float a = texture2D(uMask, vUv).a;
   if (a < 0.003) { gl_FragColor = vec4(0.0); return; }
 
-  float e = 0.003;
-  float h  = height(vUv);
-  float hx = height(vUv + vec2(e, 0.0)) - h;
-  float hy = height(vUv + vec2(0.0, e)) - h;
-  vec3 n = normalize(vec3(-hx / e * uFold, -hy / e * uFold, 1.0));
+  float e = 0.0035;
+  float h  = heightAt(vUv);
+  float hx = heightAt(vUv + vec2(e, 0.0)) - h;
+  float hy = heightAt(vUv + vec2(0.0, e)) - h;
 
-  vec3 L = normalize(vec3(-0.4, 0.6, 0.7));
+  // Aspect-normalized normal for consistent folding depth across screen sizes
+  vec3 n = normalize(vec3(-hx / e * uFold * clamp(uAspect * 0.16, 0.8, 1.4), -hy / e * uFold, 1.0));
+
+  vec3 L = normalize(vec3(-0.35, 0.65, 0.75));
   float diff = dot(n, L) * 0.5 + 0.5;
-  float spec = pow(max(dot(reflect(-L, n), vec3(0.0, 0.0, 1.0)), 0.0), 24.0);
+  float spec = pow(max(dot(reflect(-L, n), vec3(0.0, 0.0, 1.0)), 0.0), 20.0);
 
-  float m = smoothstep(-0.8, 1.8, h);
+  // Silk gradient blend across the fold heights
+  float m = smoothstep(-0.7, 1.2, h);
   vec3 col = mix(uC0, uC1, smoothstep(0.0, 0.5, m));
   col = mix(col, uC2, smoothstep(0.5, 1.0, m));
 
-  vec2 d = toMouse(vUv);
-  float f = exp(-dot(d, d) * 1.5) * uHover;
-  col = mix(col, uHot, clamp(f * 1.2, 0.0, 1.0) * (0.55 + 0.45 * sin(h * 3.0 + uTime)));
+  // Ambient traveling shimmer: smooth flowing silk sheen along the letters
+  float shimmer = sin(vUv.x * 4.0 - uTime * 1.2 + h * 2.0) * 0.5 + 0.5;
+  shimmer = pow(shimmer, 3.5);
+  col = mix(col, uHot, shimmer * 0.28);
 
-  col *= 0.74 + 0.38 * diff;
-  col += spec * 0.22;
+  // Touch / hover glow
+  vec2 d = toMouse(vUv);
+  float f = exp(-dot(d, d) * 1.8) * uHover;
+  col = mix(col, uHot, clamp(f * 1.3, 0.0, 1.0) * (0.55 + 0.45 * sin(h * 3.0 + uTime * 2.0)));
+
+  col *= 0.74 + 0.42 * diff;
+  col += spec * 0.32;
   gl_FragColor = vec4(col * a, a);
 }`;
 
@@ -98,7 +115,15 @@ function hexToRgb(hex: string): [number, number, number] {
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 }
 
-function buildMask(text: string, family: string, weight: number | string, cssW: number, dpr: number) {
+function buildMask(
+  text: string,
+  family: string,
+  weight: number | string,
+  cssW: number,
+  dpr: number,
+  mScale = 0.94,
+  dScale = 0.92
+) {
   const c = document.createElement("canvas");
   const probe = c.getContext("2d");
   if (!probe) return { mask: c, cssH: 100 };
@@ -108,10 +133,28 @@ function buildMask(text: string, family: string, weight: number | string, cssW: 
   const w100 = m.width || 1;
   const asc = m.actualBoundingBoxAscent || 75;   // measured, so ascenders/descenders fit
   const desc = m.actualBoundingBoxDescent || 22;
-  const fs = (cssW * 0.98 * 100) / w100;
+
+  // Responsive scale:
+  // Mobile (< 640px): strictly capped so wordmark never clips horizontally on phones
+  // Desktop (>= 1024px): balanced scale (~0.92)
+  // Tablet (640px - 1023px): balanced scale (~0.90)
+  let scale = 1.0;
+  if (cssW < 640) {
+    scale = Math.min(mScale, 0.94);
+  } else if (cssW >= 1024) {
+    scale = Math.min(dScale, 0.92);
+  } else {
+    scale = 0.90;
+  }
+
+  // Safe maximum target width that guarantees clean horizontal margins
+  const targetW = Math.min(cssW * 0.94, cssW * scale);
+  const fs = (targetW * 100) / w100;
   const k = fs / 100;
-  const pad = fs * 0.06;
-  const cssH = Math.ceil((asc + desc) * k + pad * 2);
+  const padTop = Math.max(4, Math.ceil(fs * 0.06));
+  const padBottom = Math.max(4, Math.ceil(fs * 0.05));
+  const cssH = Math.ceil((asc + desc) * k + padTop + padBottom);
+
   c.width = Math.round(cssW * dpr);
   c.height = Math.round(cssH * dpr);
   const ctx = c.getContext("2d");
@@ -122,7 +165,7 @@ function buildMask(text: string, family: string, weight: number | string, cssW: 
   ctx.textAlign = "center";
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = "#fff";
-  ctx.fillText(text, cssW / 2, pad + asc * k);
+  ctx.fillText(text, cssW / 2, padTop + asc * k);
   return { mask: c, cssH };
 }
 
@@ -144,6 +187,8 @@ export interface ClothTextProps {
   fold?: number;
   className?: string;
   style?: React.CSSProperties;
+  mobileScale?: number;
+  desktopScale?: number;
 }
 
 export default function ClothText({
@@ -155,6 +200,8 @@ export default function ClothText({
   fold = 0.1,                                 // depth of the folds (0.05 – 0.2)
   className,
   style,
+  mobileScale = 0.94,
+  desktopScale = 0.92,
 }: ClothTextProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -214,7 +261,20 @@ export default function ClothText({
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
     const reduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const st = { w: 0, h: 0, tx: 0.5, ty: 0.5, mx: 0.5, my: 0.5, vx: 0, vy: 0, hover: 0, target: 0, visible: true };
+    const st = {
+      w: 0,
+      h: 0,
+      tx: 0.5,
+      ty: 0.5,
+      mx: 0.5,
+      my: 0.5,
+      vx: 0,
+      vy: 0,
+      hover: 0,
+      target: 0,
+      visible: true,
+      lastInteraction: 0,
+    };
     let raf = 0, alive = true;
     const t0 = performance.now();
 
@@ -232,13 +292,29 @@ export default function ClothText({
       if (!alive) return;
       raf = requestAnimationFrame(loop);
       if (!st.visible) return;
+
+      const idleDuration = now - st.lastInteraction;
+      // Ambient wave & idle shimmer sweep (especially prominent on mobile when untouched)
+      if (st.target === 0 && idleDuration > 600) {
+        const t = (now - t0) * 0.001;
+        const ambX = 0.5 + 0.36 * Math.sin(t * 0.85);
+        const ambY = 0.5 + 0.22 * Math.cos(t * 1.15);
+        st.tx += (ambX - st.tx) * 0.06;
+        st.ty += (ambY - st.ty) * 0.06;
+
+        const ambHover = 0.45 + 0.25 * Math.sin(t * 1.3);
+        st.hover += (ambHover - st.hover) * 0.05;
+      } else {
+        st.hover += (st.target - st.hover) * 0.08;
+      }
+
       const px = st.mx, py = st.my;
       st.mx += (st.tx - st.mx) * 0.14;
       st.my += (st.ty - st.my) * 0.14;
       const aspect = st.w / (st.h || 1);
       st.vx += ((st.mx - px) * 30 * aspect - st.vx) * 0.2;
       st.vy += ((st.my - py) * 30 - st.vy) * 0.2;
-      st.hover += (st.target - st.hover) * 0.08;
+
       draw(now);
     };
 
@@ -253,7 +329,7 @@ export default function ClothText({
         }
       } catch (_) {}
       if (!alive) return;
-      const { mask, cssH } = buildMask(label, fontFamily, fontWeight, cssW, dpr);
+      const { mask, cssH } = buildMask(label, fontFamily, fontWeight, cssW, dpr, mobileScale, desktopScale);
       st.w = cssW; st.h = cssH;
       canvas.width = mask.width; canvas.height = mask.height;
       canvas.style.width = cssW + "px"; canvas.style.height = cssH + "px";
@@ -265,39 +341,109 @@ export default function ClothText({
       draw(performance.now());
     };
 
-    const onMove = (e: PointerEvent | MouseEvent) => {
+    const updatePointer = (clientX: number, clientY: number, isActive: boolean) => {
       if (!canvas) return;
       const r = canvas.getBoundingClientRect();
-      if (!r.width) return;
-      const x = (e.clientX - r.left) / r.width;
-      const y = (e.clientY - r.top) / r.height;
-      const near = x > -0.1 && x < 1.1 && y > -0.8 && y < 1.8;
-      st.target = near ? 1 : 0;
-      if (near) { st.tx = x; st.ty = y; }
+      if (!r.width || !r.height) return;
+      const x = (clientX - r.left) / r.width;
+      const y = (clientY - r.top) / r.height;
+      const near = x > -0.15 && x < 1.15 && y > -0.6 && y < 1.6;
+      if (isActive || near) {
+        st.tx = Math.max(-0.1, Math.min(1.1, x));
+        st.ty = Math.max(-0.2, Math.min(1.2, y));
+        st.target = 1;
+        st.lastInteraction = performance.now();
+      } else {
+        st.target = 0;
+      }
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      updatePointer(e.clientX, e.clientY, false);
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      updatePointer(e.clientX, e.clientY, true);
+    };
+
+    const onPointerUp = () => {
+      st.target = 0;
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        updatePointer(e.touches[0].clientX, e.touches[0].clientY, true);
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        updatePointer(e.touches[0].clientX, e.touches[0].clientY, true);
+      }
+    };
+
+    const onTouchEnd = () => {
+      st.target = 0;
     };
 
     const ro = new ResizeObserver(resize);
     ro.observe(wrap);
     const io = new IntersectionObserver(([en]) => { st.visible = en.isIntersecting; });
     io.observe(wrap);
+
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      (document as any).fonts.ready?.then(() => {
+        if (alive) resize();
+      });
+    }
+
     resize();
 
     if (!reduced) {
-      window.addEventListener("pointermove", onMove as any, { passive: true });
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      wrap.addEventListener("pointerdown", onPointerDown, { passive: true });
+      wrap.addEventListener("pointerup", onPointerUp, { passive: true });
+      wrap.addEventListener("pointercancel", onPointerUp, { passive: true });
+
+      wrap.addEventListener("touchstart", onTouchStart, { passive: true });
+      wrap.addEventListener("touchmove", onTouchMove, { passive: true });
+      wrap.addEventListener("touchend", onTouchEnd, { passive: true });
+      wrap.addEventListener("touchcancel", onTouchEnd, { passive: true });
+
       raf = requestAnimationFrame(loop);
     }
 
     return () => {
       alive = false;
       cancelAnimationFrame(raf);
-      window.removeEventListener("pointermove", onMove as any);
+      window.removeEventListener("pointermove", onPointerMove);
+      wrap.removeEventListener("pointerdown", onPointerDown);
+      wrap.removeEventListener("pointerup", onPointerUp);
+      wrap.removeEventListener("pointercancel", onPointerUp);
+
+      wrap.removeEventListener("touchstart", onTouchStart);
+      wrap.removeEventListener("touchmove", onTouchMove);
+      wrap.removeEventListener("touchend", onTouchEnd);
+      wrap.removeEventListener("touchcancel", onTouchEnd);
+
       ro.disconnect();
       io.disconnect();
     };
-  }, [label, colorKey, fontFamily, fontWeight, fold]);
+  }, [label, colorKey, fontFamily, fontWeight, fold, mobileScale, desktopScale]);
 
   return (
-    <div ref={wrapRef} role="img" aria-label={label} className={className} style={{ width: "100%", ...style }}>
+    <div
+      ref={wrapRef}
+      role="img"
+      aria-label={label}
+      className={className}
+      style={{
+        width: "100%",
+        lineHeight: 0,
+        touchAction: "pan-y",
+        ...style,
+      }}
+    >
       {fallback ? (
         <span
           style={{
@@ -310,7 +456,7 @@ export default function ClothText({
           {label}
         </span>
       ) : (
-        <canvas ref={canvasRef} aria-hidden="true" style={{ display: "block", margin: "0 auto" }} />
+        <canvas ref={canvasRef} aria-hidden="true" style={{ display: "block", margin: "0 auto", verticalAlign: "bottom" }} />
       )}
     </div>
   );

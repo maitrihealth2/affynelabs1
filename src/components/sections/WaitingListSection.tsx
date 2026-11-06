@@ -12,7 +12,7 @@ export const WaitingListSection: React.FC = () => {
   return (
     <section
       id="mythri"
-      className="relative w-full min-h-screen px-6 sm:px-12 lg:px-20 pt-24 sm:pt-28 lg:py-14 pb-12 flex flex-col justify-center overflow-hidden select-none"
+      className="relative w-full min-h-0 sm:min-h-screen px-4 sm:px-8 md:px-12 lg:px-20 py-14 sm:py-24 lg:py-16 xl:py-18 flex flex-col justify-center overflow-hidden select-none"
     >
       {/* Live Interactive WebGL Pastel Silk Background */}
       <div className="absolute inset-0 z-0">
@@ -40,21 +40,35 @@ export const WaitingListSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center my-auto py-2">
           
           {/* LEFT COLUMN: Editorial Storytelling & Early Access Action */}
-          <div className="lg:col-span-6 space-y-3.5 sm:space-y-5 pointer-events-auto">
-            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#1D4E89] block">
-              Product Horizon · Mythri Companion
-            </span>
-
-            <h2 className="text-[28px] sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[54px] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-[#0C1A30]">
+          <div className="lg:col-span-6 space-y-3.5 sm:space-y-5 pointer-events-auto min-w-0">
+            <motion.h2
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-[clamp(1.75rem,5.5vw,3.35rem)] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-[#0C1A30]"
+            >
               Something more <span className="text-[#1D4E89] italic">thoughtful</span> is on its way.
-            </h2>
+            </motion.h2>
 
-            <p className="text-sm sm:text-lg text-[#334155] leading-relaxed max-w-xl">
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="text-sm sm:text-lg text-[#334155] leading-relaxed max-w-xl"
+            >
               Mythri is designed as a calm, supportive companion navigating loneliness and everyday emotional anxiety — grounded in deterministic clinical safety.
-            </p>
+            </motion.p>
 
             {/* Early Access Action Bar with Linked Agreement Checkbox */}
-            <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="pt-2 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
+            >
               <button
                 type="button"
                 onClick={() => setIsPolicySquareOpen(prev => !prev)}
@@ -104,7 +118,7 @@ export const WaitingListSection: React.FC = () => {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Subtle Clinical Trust Badge */}
             <div className="flex items-center gap-2 pt-1 text-xs text-[#64748B]">
